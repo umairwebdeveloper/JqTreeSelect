@@ -22,6 +22,9 @@
 
         return this.each(function () {
             let $originalSelect = $(this);
+            let $btnAll = null;
+            let $btnClear = null;
+            let $btnReset = null;
 
             let existingWrapper = $originalSelect.data(
                 "wi3bit-multi-select-wrapper",
@@ -221,6 +224,7 @@
                                 $notFound.hide();
                             }
                         }
+                        updateHeaderButtons();
                     });
                 }
 
@@ -250,12 +254,13 @@
                     }
 
                     if (settings.showSelectAll) {
-                        let $btnAll = $(
+                        $btnAll = $(
                             '<span class="p-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Select All"><i class="fa-solid fa-check-double wi3bit-cursor-pointer wi3bit-text-hover-primary"></i></span>',
                         );
                         $actionsWrapper.append($btnAll);
                         new bootstrap.Tooltip($btnAll[0]);
                         $btnAll.on("click", function () {
+                            if ($btnAll.hasClass("wi3bit-action-disabled")) return;
                             $optionsContainer
                                 .find('input[type="checkbox"]:visible')
                                 .prop("checked", true);
@@ -265,12 +270,13 @@
                         });
                     }
                     if (settings.showClearAll) {
-                        let $btnClear = $(
+                        $btnClear = $(
                             '<span class="p-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear All"><i class="fa-solid fa-xmark wi3bit-cursor-pointer wi3bit-text-hover-danger"></i></span>',
                         );
                         $actionsWrapper.append($btnClear);
                         new bootstrap.Tooltip($btnClear[0]);
                         $btnClear.on("click", function () {
+                            if ($btnClear.hasClass("wi3bit-action-disabled")) return;
                             $optionsContainer
                                 .find('input[type="checkbox"]:visible')
                                 .prop("checked", false);
@@ -280,12 +286,13 @@
                         });
                     }
                     if (settings.showReset) {
-                        let $btnReset = $(
+                        $btnReset = $(
                             '<span class="p-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to Default"><i class="fa-solid fa-arrow-rotate-left wi3bit-cursor-pointer wi3bit-text-hover-primary"></i></span>',
                         );
                         $actionsWrapper.append($btnReset);
                         new bootstrap.Tooltip($btnReset[0]);
                         $btnReset.on("click", function () {
+                            if ($btnReset.hasClass("wi3bit-action-disabled")) return;
                             $optionsContainer
                                 .find(".select-checkbox:visible")
                                 .each(function () {
@@ -497,7 +504,8 @@
             function syncChainUp() {
                 if (!settings.nestedGroups) return;
 
-                let $allSelectCheckboxes = $optionsContainer.find(".select-checkbox");
+                let $allSelectCheckboxes =
+                    $optionsContainer.find(".select-checkbox");
 
                 $optionsContainer.find(".group-2-checkbox").each(function () {
                     let sgId = $(this).data("g2-id");
@@ -537,37 +545,55 @@
             }
 
             function syncChainForOption($optionCheckbox) {
-                let g2Id = $optionCheckbox.data('g2-parent');
-                let g1Id = $optionCheckbox.data('g1-parent');
-                
+                let g2Id = $optionCheckbox.data("g2-parent");
+                let g1Id = $optionCheckbox.data("g1-parent");
+
                 if (g2Id) {
-                    let $g2Checkbox = $optionsContainer.find(`.group-2-checkbox[data-g2-id="${g2Id}"]`);
-                    let $siblings = $optionsContainer.find(`.select-checkbox[data-g2-parent="${g2Id}"]`);
-                    let checkedCount = $siblings.filter(':checked').length;
+                    let $g2Checkbox = $optionsContainer.find(
+                        `.group-2-checkbox[data-g2-id="${g2Id}"]`,
+                    );
+                    let $siblings = $optionsContainer.find(
+                        `.select-checkbox[data-g2-parent="${g2Id}"]`,
+                    );
+                    let checkedCount = $siblings.filter(":checked").length;
                     let allChecked = checkedCount === $siblings.length;
                     let noneChecked = checkedCount === 0;
-                    $g2Checkbox.prop('checked', allChecked).prop('indeterminate', !allChecked && !noneChecked);
+                    $g2Checkbox
+                        .prop("checked", allChecked)
+                        .prop("indeterminate", !allChecked && !noneChecked);
                 }
-                
+
                 if (g1Id) {
-                    let $g1Checkbox = $optionsContainer.find(`.group-1-checkbox[data-g1-id="${g1Id}"]`);
-                    let $siblings = $optionsContainer.find(`.select-checkbox[data-g1-parent="${g1Id}"]`);
-                    let checkedCount = $siblings.filter(':checked').length;
+                    let $g1Checkbox = $optionsContainer.find(
+                        `.group-1-checkbox[data-g1-id="${g1Id}"]`,
+                    );
+                    let $siblings = $optionsContainer.find(
+                        `.select-checkbox[data-g1-parent="${g1Id}"]`,
+                    );
+                    let checkedCount = $siblings.filter(":checked").length;
                     let allChecked = checkedCount === $siblings.length;
                     let noneChecked = checkedCount === 0;
-                    $g1Checkbox.prop('checked', allChecked).prop('indeterminate', !allChecked && !noneChecked);
+                    $g1Checkbox
+                        .prop("checked", allChecked)
+                        .prop("indeterminate", !allChecked && !noneChecked);
                 }
             }
 
             function syncChainForGroup2($g2Checkbox) {
-                let g1Id = $g2Checkbox.data('g1-parent');
+                let g1Id = $g2Checkbox.data("g1-parent");
                 if (g1Id) {
-                    let $g1Checkbox = $optionsContainer.find(`.group-1-checkbox[data-g1-id="${g1Id}"]`);
-                    let $siblings = $optionsContainer.find(`.select-checkbox[data-g1-parent="${g1Id}"]`);
-                    let checkedCount = $siblings.filter(':checked').length;
+                    let $g1Checkbox = $optionsContainer.find(
+                        `.group-1-checkbox[data-g1-id="${g1Id}"]`,
+                    );
+                    let $siblings = $optionsContainer.find(
+                        `.select-checkbox[data-g1-parent="${g1Id}"]`,
+                    );
+                    let checkedCount = $siblings.filter(":checked").length;
                     let allChecked = checkedCount === $siblings.length;
                     let noneChecked = checkedCount === 0;
-                    $g1Checkbox.prop('checked', allChecked).prop('indeterminate', !allChecked && !noneChecked);
+                    $g1Checkbox
+                        .prop("checked", allChecked)
+                        .prop("indeterminate", !allChecked && !noneChecked);
                 }
             }
 
@@ -669,6 +695,62 @@
                 return summaryItems.join(", ");
             }
 
+            function updateHeaderButtons() {
+                let query = "";
+                if (settings.showSearch && $searchContainer) {
+                    query = $searchContainer.find(".wi3bit-search-input").val().toLowerCase().trim();
+                }
+
+                let $visibleCheckboxes;
+                if (query === "") {
+                    $visibleCheckboxes = $optionsContainer.find(".select-checkbox");
+                } else {
+                    $visibleCheckboxes = $optionsContainer.find(".select-checkbox:visible");
+                }
+
+                let visibleTotal = $visibleCheckboxes.length;
+                let visibleChecked = $visibleCheckboxes.filter(":checked").length;
+
+                if ($btnAll) {
+                    if (visibleTotal === 0 || visibleChecked === visibleTotal) {
+                        $btnAll.addClass("wi3bit-action-disabled");
+                        let tooltip = bootstrap.Tooltip.getInstance($btnAll[0]);
+                        if (tooltip) tooltip.hide();
+                    } else {
+                        $btnAll.removeClass("wi3bit-action-disabled");
+                    }
+                }
+
+                if ($btnClear) {
+                    if (visibleTotal === 0 || visibleChecked === 0) {
+                        $btnClear.addClass("wi3bit-action-disabled");
+                        let tooltip = bootstrap.Tooltip.getInstance($btnClear[0]);
+                        if (tooltip) tooltip.hide();
+                    } else {
+                        $btnClear.removeClass("wi3bit-action-disabled");
+                    }
+                }
+
+                if ($btnReset) {
+                    let isResetDisabled = true;
+                    $visibleCheckboxes.each(function () {
+                        let isChecked = $(this).prop("checked");
+                        let isDefault = defaultSelectedValues.includes($(this).val());
+                        if (isChecked !== isDefault) {
+                            isResetDisabled = false;
+                            return false;
+                        }
+                    });
+                    if (isResetDisabled) {
+                        $btnReset.addClass("wi3bit-action-disabled");
+                        let tooltip = bootstrap.Tooltip.getInstance($btnReset[0]);
+                        if (tooltip) tooltip.hide();
+                    } else {
+                        $btnReset.removeClass("wi3bit-action-disabled");
+                    }
+                }
+            }
+
             function updateUI($changedElem) {
                 let checkedCount = 0;
                 let selectedValues = [];
@@ -681,21 +763,21 @@
                 $originalSelect.val(selectedValues).trigger("change");
 
                 if ($changedElem && settings.nestedGroups) {
-                    if ($changedElem.hasClass('select-checkbox')) {
+                    if ($changedElem.hasClass("select-checkbox")) {
                         syncChainForOption($changedElem);
-                    } else if ($changedElem.hasClass('group-2-checkbox')) {
+                    } else if ($changedElem.hasClass("group-2-checkbox")) {
                         syncChainForGroup2($changedElem);
                     }
                 } else {
                     syncChainUp();
                 }
 
-                let $btnAllIcon = $wrapper.find('.fa-check-double');
+                let $btnAllIcon = $wrapper.find(".fa-check-double");
                 if ($btnAllIcon.length) {
                     if (checkedCount === totalOptions && totalOptions > 0) {
-                        $btnAllIcon.addClass('text-primary');
+                        $btnAllIcon.addClass("text-primary");
                     } else {
-                        $btnAllIcon.removeClass('text-primary');
+                        $btnAllIcon.removeClass("text-primary");
                     }
                 }
 
@@ -709,6 +791,8 @@
                     $selectedText.hide();
                     $countBadge.hide();
                 }
+
+                updateHeaderButtons();
             }
 
             updateUI();

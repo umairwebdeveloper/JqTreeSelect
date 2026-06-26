@@ -1,6 +1,7 @@
 /* --- WI3BIT Custom Multi-Select Dropdown Styles --- */
 
 .wi3bit-multi-select .wi3bit-select-display {
+    position: relative !important;
     min-height: 36px;
     width: 100%; /* Changed to 100% to fill container, max-width handled by wrapper */
     cursor: pointer;
@@ -46,7 +47,7 @@
     border-radius: 0.5rem;
     min-width: 200px; /* Ensure a decent minimum width */
 }
-        
+
 .wi3bit-multi-select .wi3bit-action-header {
     position: sticky;
     top: -0.5rem;
@@ -56,9 +57,30 @@
     margin-top: -0.5rem;
 }
 
-.wi3bit-cursor-pointer { cursor: pointer; }
-.wi3bit-text-hover-primary:hover { color: var(--bs-primary); }
-.wi3bit-text-hover-danger:hover { color: var(--bs-danger); }
+.wi3bit-cursor-pointer {
+    cursor: pointer;
+}
+
+.wi3bit-text-hover-primary:hover {
+    color: var(--bs-primary);
+}
+
+.wi3bit-text-hover-danger:hover {
+    color: var(--bs-danger);
+}
+
+.wi3bit-multi-select .wi3bit-action-disabled {
+    opacity: 0.4;
+}
+
+.wi3bit-multi-select .wi3bit-action-disabled i {
+    cursor: not-allowed !important;
+    color: var(--bs-gray-400) !important;
+}
+
+.wi3bit-multi-select .wi3bit-action-disabled i:hover {
+    color: var(--bs-gray-400) !important;
+}
 
 /* --- Tree Hierarchy Styles --- */
 .wi3bit-multi-select .wi3bit-select-option,
@@ -130,6 +152,7 @@
     margin-left: 0.5rem;
     padding-left: 0;
 }
+
 .wi3bit-multi-select .wi3bit-flat-groups .wi3bit-tree-node::before {
     display: none;
 }
@@ -138,6 +161,7 @@
 .wi3bit-multi-select .wi3bit-search-container {
     padding: 2px 4px;
 }
+
 .wi3bit-multi-select .wi3bit-search-input:focus {
     box-shadow: none;
     border-color: var(--bs-primary);
