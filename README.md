@@ -10,7 +10,7 @@
 ![Version](https://img.shields.io/badge/version-1.2.0-green)
 ![Production Ready](https://img.shields.io/badge/production-ready-brightgreen)
 
-[**📖 Documentation**](https://umairwebdeveloper.github.io/JqTreeSelect/) · [**🎮 Live Demo**](https://umairwebdeveloper.github.io/JqTreeSelect/demo.html)
+[**📖 Documentation**](https://umairwebdeveloper.github.io/jqTreeSelect/) · [**🎮 Live Demo**](https://umairwebdeveloper.github.io/jqTreeSelect/demo.html)
 
 </div>
 
@@ -48,19 +48,23 @@ Include the plugin styles and scripts after jQuery:
 <!-- jqTreeSelect styles -->
 <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/umairwebdeveloper/JqTreeSelect/dist/jq-tree-select.min.css"
+    href="https://cdn.jsdelivr.net/gh/umairwebdeveloper/jqTreeSelect/dist/jq-tree-select.min.css"
 />
 
 <!-- jqTreeSelect plugin -->
-<script src="https://cdn.jsdelivr.net/gh/umairwebdeveloper/JqTreeSelect/dist/jq-tree-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/umairwebdeveloper/jqTreeSelect/dist/jq-tree-select.min.js"></script>
 ```
 
 > [!TIP]
 > **Optional Bootstrap 5 Integration**:
 > `jqTreeSelect` is completely standalone and does not require Bootstrap or FontAwesome. However, loading **Bootstrap 5 CSS and JS** can enhance forms styling, layouts, and enable rich tooltip descriptions for selected element counts.
+>
 > ```html
 > <!-- Optional: Bootstrap 5 for better UI & tooltips -->
-> <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+> <link
+>     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+>     rel="stylesheet"
+> />
 > <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 > ```
 
@@ -372,10 +376,10 @@ $.fn.mySelect = jts;
 
 ## 🧩 Dependencies
 
-| Dependency                               | Version | Required    |
-| ---------------------------------------- | ------- | ----------- |
-| [jQuery](https://jquery.com/)            | 3.6+    | ✅ Required |
-| [Bootstrap](https://getbootstrap.com/)   | 5.x     | ❌ Optional (Only for icons/tooltips if loaded) |
+| Dependency                               | Version | Required                                                     |
+| ---------------------------------------- | ------- | ------------------------------------------------------------ |
+| [jQuery](https://jquery.com/)            | 3.6+    | ✅ Required                                                  |
+| [Bootstrap](https://getbootstrap.com/)   | 5.x     | ❌ Optional (Only for icons/tooltips if loaded)              |
 | [Font Awesome](https://fontawesome.com/) | 6.x     | ❌ Optional (Only if you override icons with custom classes) |
 
 ---
