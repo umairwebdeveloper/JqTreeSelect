@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Multi-Select Tree</title>
+    <title>Dynamic jqTreeSelect Demo</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="wi3bit-multi-select.css">
+    <link rel="stylesheet" href="jq-tree-select.css">
     <style>
         .card {
             border-radius: 12px;
@@ -33,7 +33,7 @@
     <div class="container-fluid max-width-xxl">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="mb-1 fw-bold text-dark"><i class="fa-solid fa-list-check me-2 text-primary"></i>WI3BIT Multi-Select</h2>
+                <h2 class="mb-1 fw-bold text-dark"><i class="fa-solid fa-list-check me-2 text-primary"></i>jqTreeSelect Demo</h2>
                 <p class="text-muted m-0">Production-ready, highly configurable dynamic tree multi-select dropdown</p>
             </div>
             <span class="badge bg-success px-3 py-2 rounded-pill"><i class="fa-solid fa-circle-check me-1"></i>Production Ready (v1.2.0)</span>
@@ -239,7 +239,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="wi3bit-multi-select.js"></script>
+    <script src="jq-tree-select.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -253,7 +253,7 @@
             }
 
             // 1. Initialize Simple Dropdown using nested parameters
-            $('#simpleSelect').wi3bitMultiSelect({ 
+            $('#simpleSelect').jqTreeSelect({ 
                 layout: {
                     width: '100%',
                     placeholder: 'Select options...'
@@ -263,11 +263,12 @@
                 }
             });
 
-            // 2. Initialize Group Dropdown (reads configurations from data-* attributes)
-            $('#groupSelect').wi3bitMultiSelect();
+            // 2. Initialize Group Dropdown (reads configurations from data-* attributes on DOM)
+            // Notice we set data-toggle="jq-tree-select" in docs.html, but here we can just do it programmatically
+            $('#groupSelect').jqTreeSelect();
 
             // 3. Initialize Nested Dropdown
-            $('#nestedSelect').wi3bitMultiSelect({ 
+            $('#nestedSelect').jqTreeSelect({ 
                 grouping: {
                     nested: true
                 },
@@ -285,14 +286,14 @@
             });
 
             // 4. Initialize Disabled Select
-            $('#disabledSelect').wi3bitMultiSelect({
+            $('#disabledSelect').jqTreeSelect({
                 layout: {
                     width: '100%'
                 }
             });
 
             // 5. Initialize Unlimited Level Tree and bind Callbacks
-            $('#unlimitedSelect').wi3bitMultiSelect({ 
+            $('#unlimitedSelect').jqTreeSelect({ 
                 grouping: {
                     nested: true, 
                     collapsible: true,
@@ -347,56 +348,56 @@
 
             // API Console Playground Button Events
             $('#btnToggleDisable').on('click', function() {
-                let instance = $('#unlimitedSelect').data('wi3bit-multi-select');
+                let instance = $('#unlimitedSelect').data('jq-tree-select');
                 if (instance) {
                     if (instance.isDisabled) {
-                        $('#unlimitedSelect').wi3bitMultiSelect('enable');
+                        $('#unlimitedSelect').jqTreeSelect('enable');
                         logToConsole("API call: enabled widget", "system");
                     } else {
-                        $('#unlimitedSelect').wi3bitMultiSelect('disable');
+                        $('#unlimitedSelect').jqTreeSelect('disable');
                         logToConsole("API call: disabled widget", "system");
                     }
                 }
             });
 
             $('#btnValSet').on('click', function() {
-                $('#unlimitedSelect').wi3bitMultiSelect('val', ["3", "8"]);
+                $('#unlimitedSelect').jqTreeSelect('val', ["3", "8"]);
                 logToConsole("API call: val(['3', '8']) set successfully", "system");
             });
 
             $('#btnValGet').on('click', function() {
-                let val = $('#unlimitedSelect').wi3bitMultiSelect('val');
+                let val = $('#unlimitedSelect').jqTreeSelect('val');
                 logToConsole(`API call: val() returned [${val.join(', ')}]`, "system");
             });
 
             $('#btnSelectAll').on('click', function() {
-                $('#unlimitedSelect').wi3bitMultiSelect('selectAll');
+                $('#unlimitedSelect').jqTreeSelect('selectAll');
                 logToConsole("API call: selectAll() executed", "system");
             });
 
             $('#btnClear').on('click', function() {
-                $('#unlimitedSelect').wi3bitMultiSelect('clear');
+                $('#unlimitedSelect').jqTreeSelect('clear');
                 logToConsole("API call: clear() executed", "system");
             });
 
             $('#btnExpand').on('click', function() {
-                $('#unlimitedSelect').wi3bitMultiSelect('expandAll');
+                $('#unlimitedSelect').jqTreeSelect('expandAll');
                 logToConsole("API call: expandAll() executed", "system");
             });
 
             $('#btnCollapse').on('click', function() {
-                $('#unlimitedSelect').wi3bitMultiSelect('collapseAll');
+                $('#unlimitedSelect').jqTreeSelect('collapseAll');
                 logToConsole("API call: collapseAll() executed", "system");
             });
 
             $('#btnDestroy').on('click', function() {
-                $('#unlimitedSelect').wi3bitMultiSelect('destroy');
+                $('#unlimitedSelect').jqTreeSelect('destroy');
                 logToConsole("API call: destroy() executed", "system");
             });
 
             $('#btnRebuild').on('click', function() {
                 // Rebuild with custom settings
-                $('#unlimitedSelect').wi3bitMultiSelect({
+                $('#unlimitedSelect').jqTreeSelect({
                     grouping: {
                         nested: true, 
                         collapsible: true,
@@ -447,7 +448,7 @@
                 });
 
                 // Initialize the custom multi-select via the single data property parameter
-                $ajaxSelect.wi3bitMultiSelect({
+                $ajaxSelect.jqTreeSelect({
                     grouping: {
                         nested: true
                     },

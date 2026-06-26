@@ -1,5 +1,5 @@
 /**
- * WI3BIT Custom Multi-Select Dropdown Plugin
+ * jqTreeSelect Custom Multi-Select Dropdown Plugin
  * Version: 1.2.0
  * Description: A dynamic, searchable, grouped, tree-nesting multi-select plugin.
  * Production-ready with nested parameters, global defaults, data-attribute configuration,
@@ -17,7 +17,7 @@
         factory(global.jQuery);
     }
 }(typeof window !== 'undefined' ? window : this, function ($) {
-    class Wi3bitMultiSelect {
+    class JqTreeSelect {
         constructor(element, options) {
             this.$originalSelect = $(element);
             
@@ -28,7 +28,7 @@
             this.settings = $.extend(
                 true, 
                 {}, 
-                $.fn.wi3bitMultiSelect.defaults, 
+                $.fn.jqTreeSelect.defaults, 
                 dataOpts, 
                 normalizedOpts
             );
@@ -214,7 +214,7 @@
                 this._buildOptionsFromData(this.settings.data);
             }
 
-            $originalSelect.data("wi3bit-multi-select-wrapper", this.$wrapper);
+            $originalSelect.data("jq-tree-select-wrapper", this.$wrapper);
 
             this.defaultSelectedValues = $originalSelect
                 .find("option")
@@ -258,13 +258,13 @@
             $originalSelect.hide();
 
             this.$wrapper = $(
-                '<div class="wi3bit-multi-select position-relative"></div>',
+                '<div class="jq-tree-select position-relative"></div>',
             );
             if (this.settings.layout.width) {
                 this.$wrapper.css("width", this.settings.layout.width);
             }
 
-            let requiredClasses = ["form-select", "wi3bit-select-display"];
+            let requiredClasses = ["form-select", "jq-tree-select-display"];
             let uniqueClasses = [
                 ...new Set([...requiredClasses, ...originalClasses]),
             ].join(" ");
@@ -284,13 +284,13 @@
                 `<span class="text-muted placeholder-text"><i class="fa-solid fa-list-check me-2"></i>${pText}</span>`,
             );
             this.$selectedText = $(
-                '<span class="wi3bit-selected-text" style="display:none;"></span>',
+                '<span class="jq-tree-select-selected-text" style="display:none;"></span>',
             );
             this.$countBadge = $(
-                '<span class="badge bg-primary rounded-pill wi3bit-select-badge text-white" style="display:none;"></span>',
+                '<span class="badge bg-primary rounded-pill jq-tree-select-badge text-white" style="display:none;"></span>',
             );
             this.$chevron = $(
-                '<i class="fa-solid fa-chevron-down position-absolute wi3bit-select-chevron"></i>',
+                '<i class="fa-solid fa-chevron-down position-absolute jq-tree-select-chevron"></i>',
             );
 
             this.$dropdown = $(
@@ -302,7 +302,7 @@
 
             this.$optionsContainer = $("<div></div>");
             this.$notFound = $(
-                '<div class="wi3bit-not-found text-muted text-center" style="display:none;"><i class="fa-solid fa-triangle-exclamation me-2"></i>No matches found</div>',
+                '<div class="jq-tree-select-not-found text-muted text-center" style="display:none;"><i class="fa-solid fa-triangle-exclamation me-2"></i>No matches found</div>',
             );
 
             let showHeader =
@@ -315,36 +315,36 @@
 
             if (showHeader) {
                 let $btnGroup = $(
-                    '<div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom wi3bit-action-header"></div>',
+                    '<div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom jq-tree-select-action-header"></div>',
                 );
 
                 if (this.settings.search.enabled) {
                     let sPlaceholder = this.settings.search.placeholder || "Search...";
                     this.$searchContainer = $(`
-                        <div class="wi3bit-search-container flex-grow-1">
+                        <div class="jq-tree-select-search-container flex-grow-1">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-transparent border-end-0 text-muted" style="border-color: var(--bs-gray-200); padding: 0.25rem 0.5rem;"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                <input type="text" class="form-control border-start-0 wi3bit-search-input ps-0" placeholder="${sPlaceholder}" style="border-color: var(--bs-gray-200); font-size: 0.82rem; height: 30px;">
+                                <input type="text" class="form-control border-start-0 jq-tree-select-search-input ps-0" placeholder="${sPlaceholder}" style="border-color: var(--bs-gray-200); font-size: 0.82rem; height: 30px;">
                             </div>
                         </div>
                     `);
                     $btnGroup.append(this.$searchContainer);
 
                     let $searchInput = this.$searchContainer.find(
-                        ".wi3bit-search-input",
+                        ".jq-tree-select-search-input",
                     );
                     $searchInput.on("input", () => {
                         let query = $searchInput.val().toLowerCase().trim();
                         if (query === "") {
                             this.$optionsContainer
                                 .find(
-                                    ".wi3bit-group-wrapper, .wi3bit-group-header, .wi3bit-subgroup-wrapper, .wi3bit-subgroup-header, .wi3bit-select-option",
+                                    ".jq-tree-select-group-wrapper, .jq-tree-select-group-header, .jq-tree-select-subgroup-wrapper, .jq-tree-select-subgroup-header, .jq-tree-select-option",
                                 )
                                 .show();
                             if (this.settings.grouping.collapsible) {
-                                this.$optionsContainer.find(".wi3bit-tree-children").each(function () {
+                                this.$optionsContainer.find(".jq-tree-select-children").each(function () {
                                     let defCollapsed = $(this).data("default-collapsed") === true;
-                                    let $toggle = $(this).prev(".wi3bit-group-header, .wi3bit-subgroup-header").find(".wi3bit-group-toggle");
+                                    let $toggle = $(this).prev(".jq-tree-select-group-header, .jq-tree-select-subgroup-header").find(".jq-tree-select-group-toggle");
                                     if (defCollapsed) {
                                         $(this).hide();
                                         $toggle.removeClass("fa-chevron-down").addClass("fa-chevron-right");
@@ -358,12 +358,12 @@
                         } else {
                             this.$optionsContainer
                                 .find(
-                                    ".wi3bit-group-wrapper, .wi3bit-group-header, .wi3bit-subgroup-wrapper, .wi3bit-subgroup-header, .wi3bit-select-option",
+                                    ".jq-tree-select-group-wrapper, .jq-tree-select-group-header, .jq-tree-select-subgroup-wrapper, .jq-tree-select-subgroup-header, .jq-tree-select-option",
                                 )
                                 .hide();
                             let self = this;
                             this.$optionsContainer
-                                .find(".wi3bit-select-option")
+                                .find(".jq-tree-select-option")
                                 .each(function () {
                                     let optionText = $(this)
                                         .find("label")
@@ -371,14 +371,14 @@
                                         .toLowerCase();
                                     if (optionText.indexOf(query) > -1) {
                                         $(this).show();
-                                        let $ancestors = $(this).parents(".wi3bit-subgroup-wrapper, .wi3bit-group-wrapper");
+                                        let $ancestors = $(this).parents(".jq-tree-select-subgroup-wrapper, .jq-tree-select-group-wrapper");
                                         $ancestors.show();
-                                        $ancestors.children(".wi3bit-subgroup-header, .wi3bit-group-header").show();
+                                        $ancestors.children(".jq-tree-select-subgroup-header, .jq-tree-select-group-header").show();
                                         if (self.settings.grouping.collapsible) {
-                                            let $childrenContainers = $ancestors.children(".wi3bit-tree-children");
+                                            let $childrenContainers = $ancestors.children(".jq-tree-select-children");
                                             $childrenContainers.show();
-                                            $ancestors.children(".wi3bit-group-header, .wi3bit-subgroup-header")
-                                                .find(".wi3bit-group-toggle")
+                                            $ancestors.children(".jq-tree-select-group-header, .jq-tree-select-subgroup-header")
+                                                .find(".jq-tree-select-group-toggle")
                                                 .removeClass("fa-chevron-right")
                                                 .addClass("fa-chevron-down");
                                         }
@@ -386,7 +386,7 @@
                                 });
 
                             let visibleOptions = this.$optionsContainer.find(
-                                ".wi3bit-select-option:visible",
+                                ".jq-tree-select-option:visible",
                             ).length;
                             if (visibleOptions === 0) {
                                 this.$notFound.text("No matches found").show();
@@ -418,7 +418,7 @@
 
                     if (this.settings.actions.showTotalCount) {
                         let $totalBadge = $(
-                            `<span class="badge bg-light text-dark border me-1 small wi3bit-total-options-badge" data-bs-toggle="tooltip" title="Total Options">${this.totalOptions}</span>`,
+                            `<span class="badge bg-light text-dark border me-1 small jq-tree-select-total-options-badge" data-bs-toggle="tooltip" title="Total Options">${this.totalOptions}</span>`,
                         );
                         $actionsWrapper.append($totalBadge);
                         new bootstrap.Tooltip($totalBadge[0]);
@@ -432,7 +432,7 @@
                             id: "selectAll",
                             title: "Select All",
                             icon: "fa-check-double",
-                            hoverClass: "wi3bit-text-hover-primary",
+                            hoverClass: "jq-tree-select-text-hover-primary",
                             action: () => {
                                 self.$optionsContainer
                                     .find('input[type="checkbox"]:visible:not(:disabled)')
@@ -446,7 +446,7 @@
                             id: "clearAll",
                             title: "Clear All",
                             icon: "fa-xmark",
-                            hoverClass: "wi3bit-text-hover-danger",
+                            hoverClass: "jq-tree-select-text-hover-danger",
                             action: () => {
                                 self.$optionsContainer
                                     .find('input[type="checkbox"]:visible:not(:disabled)')
@@ -460,7 +460,7 @@
                             id: "reset",
                             title: "Reset to Default",
                             icon: "fa-arrow-rotate-left",
-                            hoverClass: "wi3bit-text-hover-primary",
+                            hoverClass: "jq-tree-select-text-hover-primary",
                             action: () => {
                                 self.$optionsContainer
                                     .find(".select-checkbox:visible:not(:disabled)")
@@ -480,10 +480,10 @@
                             id: "openAll",
                             title: "Expand All",
                             icon: "fa-angles-down",
-                            hoverClass: "wi3bit-text-hover-primary",
+                            hoverClass: "jq-tree-select-text-hover-primary",
                             action: () => {
-                                self.$optionsContainer.find(".wi3bit-tree-children").show();
-                                self.$optionsContainer.find(".wi3bit-group-toggle").removeClass("fa-chevron-right").addClass("fa-chevron-down");
+                                self.$optionsContainer.find(".jq-tree-select-children").show();
+                                self.$optionsContainer.find(".jq-tree-select-group-toggle").removeClass("fa-chevron-right").addClass("fa-chevron-down");
                                 self.updateUI(true);
                             }
                         });
@@ -493,10 +493,10 @@
                             id: "closeAll",
                             title: "Collapse All",
                             icon: "fa-angles-up",
-                            hoverClass: "wi3bit-text-hover-danger",
+                            hoverClass: "jq-tree-select-text-hover-danger",
                             action: () => {
-                                self.$optionsContainer.find(".wi3bit-tree-children").hide();
-                                self.$optionsContainer.find(".wi3bit-group-toggle").removeClass("fa-chevron-down").addClass("fa-chevron-right");
+                                self.$optionsContainer.find(".jq-tree-select-children").hide();
+                                self.$optionsContainer.find(".jq-tree-select-group-toggle").removeClass("fa-chevron-down").addClass("fa-chevron-right");
                                 self.updateUI(true);
                             }
                         });
@@ -518,7 +518,7 @@
                         let btn = buttons[i];
                         let $btnHtml = $(`
                             <span class="p-2" data-bs-toggle="tooltip" data-bs-placement="top" title="${btn.title}">
-                                <i class="fa-solid ${btn.icon} wi3bit-cursor-pointer ${btn.hoverClass}"></i>
+                                <i class="fa-solid ${btn.icon} jq-tree-select-cursor-pointer ${btn.hoverClass}"></i>
                             </span>
                         `);
                         $actionsWrapper.append($btnHtml);
@@ -527,7 +527,7 @@
                         saveBtnReference(btn.id, $btnHtml);
 
                         $btnHtml.on("click", function () {
-                            if ($btnHtml.hasClass("wi3bit-action-disabled")) return;
+                            if ($btnHtml.hasClass("jq-tree-select-action-disabled")) return;
                             btn.action($btnHtml);
                             let tooltip = bootstrap.Tooltip.getInstance(this);
                             if (tooltip) tooltip.hide();
@@ -536,9 +536,9 @@
 
                     if (showOverflow) {
                         let $menuWrapper = $(`
-                            <div class="dropdown wi3bit-overflow-menu" data-bs-toggle="tooltip" data-bs-placement="top" title="More Actions">
-                                <span class="p-2 wi3bit-cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-ellipsis-vertical wi3bit-text-hover-primary"></i>
+                            <div class="dropdown jq-tree-select-overflow-menu" data-bs-toggle="tooltip" data-bs-placement="top" title="More Actions">
+                                <span class="p-2 jq-tree-select-cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis-vertical jq-tree-select-text-hover-primary"></i>
                                 </span>
                                 <ul class="dropdown-menu dropdown-menu-end shadow p-1 mt-1" style="font-size: 0.85rem; min-width: 150px; z-index: 1050;">
                                 </ul>
@@ -566,7 +566,7 @@
 
                             $btnLink.on("click", function (e) {
                                 e.preventDefault();
-                                if ($btnLink.hasClass("wi3bit-action-disabled")) return;
+                                if ($btnLink.hasClass("jq-tree-select-action-disabled")) return;
                                 btn.action($btnLink);
                             });
                         }
@@ -645,7 +645,7 @@
 
                             if (sgName || sgId) {
                                 let subName = sgName || "";
-                                let subId = sgId || subName.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+                                  let subId = sgId || subName.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
                                 namesPath.push(subName);
                                 idsPath.push(subId);
                             }
@@ -687,11 +687,11 @@
                     let text = $optTag.text();
                     let isChecked = $optTag.is(":selected") ? "checked" : "";
                     let isDisabled = $optTag.is(":disabled") ? "disabled" : "";
-                    let disabledClass = isDisabled ? "wi3bit-option-disabled" : "";
+                    let disabledClass = isDisabled ? "jq-tree-select-option-disabled" : "";
                     let uid = "opt_" + Math.random().toString(36).substr(2, 9);
 
                     return $(`
-                        <div class="wi3bit-select-option py-2 px-2 m-0 wi3bit-tree-node ${disabledClass}">
+                        <div class="jq-tree-select-option py-2 px-2 m-0 jq-tree-select-node ${disabledClass}">
                             <div class="form-check m-0">
                                 <input class="form-check-input select-checkbox" type="checkbox" value="${val}" id="${uid}" data-parent-path="${parentIdPath}" ${isChecked} ${isDisabled}>
                                 <label class="form-check-label w-100" for="${uid}" style="cursor:${isDisabled ? 'not-allowed' : 'pointer'};">${text}</label>
@@ -706,7 +706,7 @@
                     let childrenStyle = isCollapsed ? 'style="display: none;"' : "";
                     
                     let toggleIconHtml = self.settings.grouping.collapsible 
-                        ? `<i class="fa-solid ${toggleIconClass} me-2 wi3bit-group-toggle wi3bit-cursor-pointer"></i>` 
+                        ? `<i class="fa-solid ${toggleIconClass} me-2 jq-tree-select-group-toggle jq-tree-select-cursor-pointer"></i>` 
                         : "";
 
                     // Check if all options in this node are disabled
@@ -724,12 +724,12 @@
                     checkEnabled(node);
                     let isNodeDisabled = !hasEnabledOptions && node.options.length > 0;
                     let nodeDisabledAttr = isNodeDisabled ? "disabled" : "";
-                    let nodeDisabledClass = isNodeDisabled ? "wi3bit-option-disabled" : "";
+                    let nodeDisabledClass = isNodeDisabled ? "jq-tree-select-option-disabled" : "";
 
                     if (depth === 1) {
-                        let $groupWrapper = $('<div class="wi3bit-group-wrapper mb-2"></div>');
+                        let $groupWrapper = $('<div class="jq-tree-select-group-wrapper mb-2"></div>');
                         let $groupHeader = $(`
-                            <div class="dropdown-header wi3bit-group-header px-2 py-2 d-flex align-items-center ${nodeDisabledClass}">
+                            <div class="dropdown-header jq-tree-select-group-header px-2 py-2 d-flex align-items-center ${nodeDisabledClass}">
                                 ${toggleIconHtml}
                                 <div class="form-check m-0 flex-grow-1">
                                     <input class="form-check-input group-checkbox" type="checkbox" id="${node.checkboxId}" data-full-path="${node.fullIdPath}" ${nodeDisabledAttr}>
@@ -739,7 +739,7 @@
                         `);
                         $groupWrapper.append($groupHeader);
 
-                        let $childrenContainer = $(`<div class="wi3bit-tree-children" ${childrenStyle} data-default-collapsed="${isCollapsed}"></div>`);
+                        let $childrenContainer = $(`<div class="jq-tree-select-children" ${childrenStyle} data-default-collapsed="${isCollapsed}"></div>`);
                         
                         for (let subId in node.children) {
                             $childrenContainer.append(renderNode(node.children[subId], depth + 1));
@@ -752,9 +752,9 @@
                         $groupWrapper.append($childrenContainer);
                         return $groupWrapper;
                     } else {
-                        let $subgroupWrapper = $('<div class="wi3bit-subgroup-wrapper wi3bit-tree-node"></div>');
+                        let $subgroupWrapper = $('<div class="jq-tree-select-subgroup-wrapper jq-tree-select-node"></div>');
                         let $subgroupHeader = $(`
-                            <div class="dropdown-header wi3bit-subgroup-header px-2 py-2 d-flex align-items-center ${nodeDisabledClass}">
+                            <div class="dropdown-header jq-tree-select-subgroup-header px-2 py-2 d-flex align-items-center ${nodeDisabledClass}">
                                 ${toggleIconHtml}
                                 <div class="form-check m-0 flex-grow-1">
                                     <input class="form-check-input group-checkbox" type="checkbox" id="${node.checkboxId}" data-full-path="${node.fullIdPath}" ${nodeDisabledAttr}>
@@ -766,7 +766,7 @@
                         `);
                         $subgroupWrapper.append($subgroupHeader);
 
-                        let $childrenContainer = $(`<div class="wi3bit-tree-children" ${childrenStyle} data-default-collapsed="${isCollapsed}"></div>`);
+                        let $childrenContainer = $(`<div class="jq-tree-select-children" ${childrenStyle} data-default-collapsed="${isCollapsed}"></div>`);
 
                         for (let subId in node.children) {
                             $childrenContainer.append(renderNode(node.children[subId], depth + 1));
@@ -803,11 +803,11 @@
                     let text = $(this).text();
                     let isChecked = $(this).is(":selected") ? "checked" : "";
                     let isDisabled = $(this).is(":disabled") ? "disabled" : "";
-                    let disabledClass = isDisabled ? "wi3bit-option-disabled" : "";
+                    let disabledClass = isDisabled ? "jq-tree-select-option-disabled" : "";
                     let uid = "opt_" + Math.random().toString(36).substr(2, 9);
 
                     let $opt = $(`
-                        <div class="wi3bit-select-option mb-1 py-2 px-2 m-0 ${disabledClass}">
+                        <div class="jq-tree-select-option mb-1 py-2 px-2 m-0 ${disabledClass}">
                             <div class="form-check m-0 ms-1">
                                 <input class="form-check-input select-checkbox" type="checkbox" value="${val}" id="${uid}" ${isChecked} ${isDisabled}>
                                 <label class="form-check-label w-100" for="${uid}" style="cursor:${isDisabled ? 'not-allowed' : 'pointer'};">${text}</label>
@@ -836,7 +836,7 @@
             });
 
             this.docClickEvent =
-                "click.wi3bit-" + Math.random().toString(36).substr(2, 9);
+                "click.jqtreeselect-" + Math.random().toString(36).substr(2, 9);
             $(document).on(this.docClickEvent, (e) => {
                 if (
                     !this.$wrapper.is(e.target) &&
@@ -846,11 +846,11 @@
                 }
             });
 
-            this.$optionsContainer.on("click", ".wi3bit-group-toggle", (e) => {
+            this.$optionsContainer.on("click", ".jq-tree-select-group-toggle", (e) => {
                 e.stopPropagation();
                 let $toggle = $(e.currentTarget);
-                let $header = $toggle.closest(".wi3bit-group-header, .wi3bit-subgroup-header");
-                let $children = $header.next(".wi3bit-tree-children");
+                let $header = $toggle.closest(".jq-tree-select-group-header, .jq-tree-select-subgroup-header");
+                let $children = $header.next(".jq-tree-select-children");
 
                 let isCollapsed = $children.is(":hidden");
                 if (isCollapsed) {
@@ -865,22 +865,22 @@
 
             this.$optionsContainer.on(
                 "click",
-                ".wi3bit-group-header, .wi3bit-subgroup-header, .wi3bit-select-option",
+                ".jq-tree-select-group-header, .jq-tree-select-subgroup-header, .jq-tree-select-option",
                 (e) => {
                     if (this.isDisabled) return;
                     let $target = $(e.target);
                     if (
                         $target.is('input[type="checkbox"]') ||
                         $target.is("label") ||
-                        $target.hasClass("wi3bit-group-toggle")
+                        $target.hasClass("jq-tree-select-group-toggle")
                     ) {
                         return;
                     }
 
                     let $row = $(e.currentTarget);
-                    if ($row.hasClass("wi3bit-group-header") || $row.hasClass("wi3bit-subgroup-header")) {
+                    if ($row.hasClass("jq-tree-select-group-header") || $row.hasClass("jq-tree-select-subgroup-header")) {
                         if (this.settings.grouping.collapsible) {
-                            $row.find(".wi3bit-group-toggle").trigger("click");
+                            $row.find(".jq-tree-select-group-toggle").trigger("click");
                             return;
                         }
                     }
@@ -905,7 +905,7 @@
                 if (this.isDisabled) return;
                 let $checkbox = $(e.currentTarget);
                 let isChecked = $checkbox.prop("checked");
-                let $childrenContainer = $checkbox.closest(".wi3bit-group-header, .wi3bit-subgroup-header").next(".wi3bit-tree-children");
+                let $childrenContainer = $checkbox.closest(".jq-tree-select-group-header, .jq-tree-select-subgroup-header").next(".jq-tree-select-children");
                 $childrenContainer.find('input[type="checkbox"]:not(:disabled)').prop("checked", isChecked).prop("indeterminate", false);
                 this.updateUI($checkbox);
             });
@@ -919,7 +919,7 @@
             }
             
             // Trigger init callback & event
-            $originalSelect.trigger("wi3bit:init", [this]);
+            $originalSelect.trigger("jqtree:init", [this]);
             if (typeof this.settings.callbacks.onInit === "function") {
                 this.settings.callbacks.onInit.call(this.$originalSelect[0], this);
             }
@@ -930,14 +930,14 @@
             this.$dropdown.addClass("show");
             this.displayTooltip.hide();
             
-            this.$originalSelect.trigger("wi3bit:open", [this]);
+            this.$originalSelect.trigger("jqtree:open", [this]);
             if (typeof this.settings.callbacks.onOpen === "function") {
                 this.settings.callbacks.onOpen.call(this.$originalSelect[0], this);
             }
 
             if (this.settings.search.enabled && this.$searchContainer) {
                 setTimeout(() => {
-                    this.$searchContainer.find(".wi3bit-search-input").focus();
+                    this.$searchContainer.find(".jq-tree-select-search-input").focus();
                 }, 50);
             }
         }
@@ -946,17 +946,17 @@
             if (!this.$dropdown.hasClass("show")) return;
             this.$dropdown.removeClass("show");
             
-            this.$originalSelect.trigger("wi3bit:close", [this]);
+            this.$originalSelect.trigger("jqtree:close", [this]);
             if (typeof this.settings.callbacks.onClose === "function") {
                 this.settings.callbacks.onClose.call(this.$originalSelect[0], this);
             }
         }
 
         syncParents($elem) {
-            let $parentContainer = $elem.closest(".wi3bit-tree-children");
+            let $parentContainer = $elem.closest(".jq-tree-select-children");
             if ($parentContainer.length === 0) return;
 
-            let $parentHeader = $parentContainer.prev(".wi3bit-group-header, .wi3bit-subgroup-header");
+            let $parentHeader = $parentContainer.prev(".jq-tree-select-group-header, .jq-tree-select-subgroup-header");
             if ($parentHeader.length === 0) return;
 
             let $parentCheckbox = $parentHeader.find(".group-checkbox");
@@ -982,9 +982,9 @@
         }
 
         syncAllGroups() {
-            let $containers = this.$optionsContainer.find(".wi3bit-tree-children");
+            let $containers = this.$optionsContainer.find(".jq-tree-select-children");
             $containers.each(function () {
-                let depth = $(this).parents(".wi3bit-tree-children").length;
+                let depth = $(this).parents(".jq-tree-select-children").length;
                 $(this).data("depth", depth);
             });
 
@@ -993,7 +993,7 @@
             });
 
             $(sortedContainers).each(function () {
-                let $parentHeader = $(this).prev(".wi3bit-group-header, .wi3bit-subgroup-header");
+                let $parentHeader = $(this).prev(".jq-tree-select-group-header, .jq-tree-select-subgroup-header");
                 if ($parentHeader.length === 0) return;
 
                 let $parentCheckbox = $parentHeader.find(".group-checkbox");
@@ -1030,11 +1030,11 @@
 
             let summaryItems = [];
 
-            this.$optionsContainer.children(".wi3bit-group-wrapper").each(function () {
+            this.$optionsContainer.children(".jq-tree-select-group-wrapper").each(function () {
                 processSummaryNode($(this));
             });
 
-            this.$optionsContainer.children(".wi3bit-select-option").each(function () {
+            this.$optionsContainer.children(".jq-tree-select-option").each(function () {
                 let $chk = $(this).find(".select-checkbox");
                 if ($chk.prop("checked")) {
                     summaryItems.push($(this).find("label").text().trim());
@@ -1042,15 +1042,15 @@
             });
 
             function processSummaryNode($wrapper) {
-                let $checkbox = $wrapper.children(".wi3bit-group-header, .wi3bit-subgroup-header").find(".group-checkbox");
+                let $checkbox = $wrapper.children(".jq-tree-select-group-header, .jq-tree-select-subgroup-header").find(".group-checkbox");
                 if ($checkbox.length && $checkbox.prop("checked") && !$checkbox.prop("indeterminate")) {
                     summaryItems.push($checkbox.siblings("label").text().trim());
                 } else {
-                    let $childrenContainer = $wrapper.children(".wi3bit-tree-children");
-                    $childrenContainer.children(".wi3bit-subgroup-wrapper").each(function () {
+                    let $childrenContainer = $wrapper.children(".jq-tree-select-children");
+                    $childrenContainer.children(".jq-tree-select-subgroup-wrapper").each(function () {
                         processSummaryNode($(this));
                     });
-                    $childrenContainer.children(".wi3bit-select-option").each(function () {
+                    $childrenContainer.children(".jq-tree-select-option").each(function () {
                         let $chk = $(this).find(".select-checkbox");
                         if ($chk.prop("checked")) {
                             summaryItems.push($(this).find("label").text().trim());
@@ -1065,7 +1065,7 @@
         updateHeaderButtons() {
             let query = "";
             if (this.settings.search.enabled && this.$searchContainer) {
-                query = this.$searchContainer.find(".wi3bit-search-input").val().toLowerCase().trim();
+                query = this.$searchContainer.find(".jq-tree-select-search-input").val().toLowerCase().trim();
             }
 
             let $visibleCheckboxes;
@@ -1080,21 +1080,21 @@
 
             if (this.$btnAll) {
                 if (visibleTotal === 0 || visibleChecked === visibleTotal) {
-                    this.$btnAll.addClass("wi3bit-action-disabled");
+                    this.$btnAll.addClass("jq-tree-select-action-disabled");
                     let tooltip = bootstrap.Tooltip.getInstance(this.$btnAll[0]);
                     if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
                 } else {
-                    this.$btnAll.removeClass("wi3bit-action-disabled");
+                    this.$btnAll.removeClass("jq-tree-select-action-disabled");
                 }
             }
 
             if (this.$btnClear) {
                 if (visibleTotal === 0 || visibleChecked === 0) {
-                    this.$btnClear.addClass("wi3bit-action-disabled");
+                    this.$btnClear.addClass("jq-tree-select-action-disabled");
                     let tooltip = bootstrap.Tooltip.getInstance(this.$btnClear[0]);
                     if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
                 } else {
-                    this.$btnClear.removeClass("wi3bit-action-disabled");
+                    this.$btnClear.removeClass("jq-tree-select-action-disabled");
                 }
             }
 
@@ -1110,39 +1110,39 @@
                     }
                 });
                 if (isResetDisabled) {
-                    this.$btnReset.addClass("wi3bit-action-disabled");
+                    this.$btnReset.addClass("jq-tree-select-action-disabled");
                     let tooltip = bootstrap.Tooltip.getInstance(this.$btnReset[0]);
                     if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
                 } else {
-                    this.$btnReset.removeClass("wi3bit-action-disabled");
+                    this.$btnReset.removeClass("jq-tree-select-action-disabled");
                 }
             }
 
             if (this.$btnOpenAll) {
-                let collapsedCount = this.$optionsContainer.find(".wi3bit-tree-children").filter(function() {
+                let collapsedCount = this.$optionsContainer.find(".jq-tree-select-children").filter(function() {
                     return this.style.display === "none";
                 }).length;
                 
                 if (!this.settings.grouping.collapsible || collapsedCount === 0) {
-                    this.$btnOpenAll.addClass("wi3bit-action-disabled");
+                    this.$btnOpenAll.addClass("jq-tree-select-action-disabled");
                     let tooltip = bootstrap.Tooltip.getInstance(this.$btnOpenAll[0]);
                     if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
                 } else {
-                    this.$btnOpenAll.removeClass("wi3bit-action-disabled");
+                    this.$btnOpenAll.removeClass("jq-tree-select-action-disabled");
                 }
             }
 
             if (this.$btnCloseAll) {
-                let expandedCount = this.$optionsContainer.find(".wi3bit-tree-children").filter(function() {
+                let expandedCount = this.$optionsContainer.find(".jq-tree-select-children").filter(function() {
                     return this.style.display !== "none";
                 }).length;
 
                 if (!this.settings.grouping.collapsible || expandedCount === 0) {
-                    this.$btnCloseAll.addClass("wi3bit-action-disabled");
+                    this.$btnCloseAll.addClass("jq-tree-select-action-disabled");
                     let tooltip = bootstrap.Tooltip.getInstance(this.$btnCloseAll[0]);
                     if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
                 } else {
-                    this.$btnCloseAll.removeClass("wi3bit-action-disabled");
+                    this.$btnCloseAll.removeClass("jq-tree-select-action-disabled");
                 }
             }
         }
@@ -1203,7 +1203,7 @@
                     selectedValues: selectedValues,
                     changedElement: $changedElem === true ? null : $changedElem
                 };
-                this.$originalSelect.trigger("wi3bit:change", [detail]);
+                this.$originalSelect.trigger("jqtree:change", [detail]);
                 if (typeof this.settings.callbacks.onChange === "function") {
                     this.settings.callbacks.onChange.call(this.$originalSelect[0], detail);
                 }
@@ -1248,8 +1248,8 @@
         expandAll() {
             if (this.isDisabled) return;
             if (this.settings.grouping.collapsible) {
-                this.$optionsContainer.find(".wi3bit-tree-children").show();
-                this.$optionsContainer.find(".wi3bit-group-toggle").removeClass("fa-chevron-right").addClass("fa-chevron-down");
+                this.$optionsContainer.find(".jq-tree-select-children").show();
+                this.$optionsContainer.find(".jq-tree-select-group-toggle").removeClass("fa-chevron-right").addClass("fa-chevron-down");
                 this.updateUI(true);
             }
         }
@@ -1257,8 +1257,8 @@
         collapseAll() {
             if (this.isDisabled) return;
             if (this.settings.grouping.collapsible) {
-                this.$optionsContainer.find(".wi3bit-tree-children").hide();
-                this.$optionsContainer.find(".wi3bit-group-toggle").removeClass("fa-chevron-down").addClass("fa-chevron-right");
+                this.$optionsContainer.find(".jq-tree-select-children").hide();
+                this.$optionsContainer.find(".jq-tree-select-group-toggle").removeClass("fa-chevron-down").addClass("fa-chevron-right");
                 this.updateUI(true);
             }
         }
@@ -1266,7 +1266,7 @@
         enable() {
             this.isDisabled = false;
             this.$originalSelect.prop("disabled", false);
-            this.$wrapper.removeClass("wi3bit-disabled");
+            this.$wrapper.removeClass("jq-tree-select-disabled");
             this.$display.removeClass("disabled");
         }
 
@@ -1274,7 +1274,7 @@
             this.isDisabled = true;
             this.$originalSelect.prop("disabled", true);
             this.closeDropdown();
-            this.$wrapper.addClass("wi3bit-disabled");
+            this.$wrapper.addClass("jq-tree-select-disabled");
             this.$display.addClass("disabled");
         }
 
@@ -1289,7 +1289,7 @@
                     let t = bootstrap.Tooltip.getInstance(this);
                     if (t) t.dispose();
                 });
-                let $oldDisplay = this.$wrapper.find(".wi3bit-select-display");
+                let $oldDisplay = this.$wrapper.find(".jq-tree-select-display");
                 if ($oldDisplay.length) {
                     let t = bootstrap.Tooltip.getInstance($oldDisplay[0]);
                     if (t) t.dispose();
@@ -1301,10 +1301,10 @@
                 $(document).off(this.docClickEvent);
             }
 
-            this.$originalSelect.removeData("wi3bit-multi-select");
+            this.$originalSelect.removeData("jq-tree-select");
             this.$originalSelect.show();
             
-            this.$originalSelect.trigger("wi3bit:destroy", [this]);
+            this.$originalSelect.trigger("jqtree:destroy", [this]);
             if (typeof this.settings.callbacks.onDestroy === "function") {
                 this.settings.callbacks.onDestroy.call(this.$originalSelect[0], this);
             }
@@ -1312,14 +1312,14 @@
     }
 
     // jQuery Plugin Definition
-    $.fn.wi3bitMultiSelect = function (options, ...args) {
+    $.fn.jqTreeSelect = function (options, ...args) {
         if (typeof options === "string") {
             let method = options;
             let returns = null;
 
             this.each(function () {
-                let instance = $.data(this, "wi3bit-multi-select");
-                if (instance instanceof Wi3bitMultiSelect && typeof instance[method] === "function") {
+                let instance = $.data(this, "jq-tree-select");
+                if (instance instanceof JqTreeSelect && typeof instance[method] === "function") {
                     let result = instance[method](...args);
                     if (method === "val" && args.length === 0) {
                         returns = result;
@@ -1331,16 +1331,16 @@
         }
 
         return this.each(function () {
-            let instance = $.data(this, "wi3bit-multi-select");
+            let instance = $.data(this, "jq-tree-select");
             if (instance) {
                 instance.destroy();
             }
-            $.data(this, "wi3bit-multi-select", new Wi3bitMultiSelect(this, options));
+            $.data(this, "jq-tree-select", new JqTreeSelect(this, options));
         });
     };
 
     // Global Defaults (nested structure)
-    $.fn.wi3bitMultiSelect.defaults = {
+    $.fn.jqTreeSelect.defaults = {
         layout: {
             width: "100%",
             height: "36px",
@@ -1376,20 +1376,20 @@
     };
 
     // Expose constructor on prototype for extension access
-    $.fn.wi3bitMultiSelect.Constructor = Wi3bitMultiSelect;
+    $.fn.jqTreeSelect.Constructor = JqTreeSelect;
 
     // noConflict implementation
-    let old = $.fn.wi3bitMultiSelect;
-    $.fn.wi3bitMultiSelect.noConflict = function () {
-        $.fn.wi3bitMultiSelect = old;
+    let old = $.fn.jqTreeSelect;
+    $.fn.jqTreeSelect.noConflict = function () {
+        $.fn.jqTreeSelect = old;
         return this;
     };
 
     // Auto-Init Data API
     $(function () {
-        $('select[data-toggle="wi3bit-multi-select"]').each(function () {
+        $('select[data-toggle="jq-tree-select"]').each(function () {
             let $select = $(this);
-            $select.wi3bitMultiSelect();
+            $select.jqTreeSelect();
         });
     });
 }));

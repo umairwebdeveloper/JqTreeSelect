@@ -1,0 +1,247 @@
+/* --- jqTreeSelect Custom Multi-Select Dropdown Styles --- */
+
+.jq-tree-select {
+    --jqtree-primary: #0d6efd;
+    --jqtree-primary-hover: #0b5ed7;
+    --jqtree-danger: #dc3545;
+    --jqtree-danger-hover: #bb2d3b;
+    --jqtree-border-color: var(--bs-border-color, #dee2e6);
+    --jqtree-bg: var(--bs-body-bg, #fff);
+    --jqtree-text: var(--bs-body-color, #212529);
+    --jqtree-text-muted: var(--bs-secondary-color, #6c757d);
+    --jqtree-hover-bg: var(--bs-gray-100, #f8f9fa);
+    --jqtree-border-radius: var(--bs-border-radius, 0.375rem);
+    
+    position: relative;
+}
+
+.jq-tree-select .jq-tree-select-display {
+    position: relative !important;
+    min-height: 36px;
+    width: 100%;
+    cursor: pointer;
+    padding-right: 35px !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    background-image: none !important;
+    background-color: var(--jqtree-bg);
+    color: var(--jqtree-text);
+    border: 1px solid var(--jqtree-border-color);
+    border-radius: var(--jqtree-border-radius);
+}
+
+.jq-tree-select .jq-tree-select-display:hover {
+    border-color: var(--bs-gray-400);
+}
+
+.jq-tree-select .jq-tree-select-selected-text {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+    font-size: 0.9rem;
+    color: var(--jqtree-text);
+}
+
+.jq-tree-select .jq-tree-select-badge {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    background-color: var(--jqtree-primary) !important;
+}
+
+.jq-tree-select .jq-tree-select-chevron {
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--jqtree-text-muted);
+    pointer-events: none;
+}
+
+/* --- Dropdown Container Styles --- */
+.jq-tree-select .dropdown-menu {
+    max-height: 400px;
+    overflow-y: auto;
+    border-radius: var(--jqtree-border-radius);
+    min-width: 200px;
+    background-color: var(--jqtree-bg);
+    border: 1px solid var(--jqtree-border-color);
+}
+
+.jq-tree-select .jq-tree-select-action-header {
+    position: sticky;
+    top: -0.5rem;
+    background-color: var(--jqtree-bg);
+    z-index: 10;
+    padding-top: 0.5rem;
+    margin-top: -0.5rem;
+    border-bottom: 1px solid var(--jqtree-border-color) !important;
+}
+
+.jq-tree-select-cursor-pointer {
+    cursor: pointer;
+}
+
+.jq-tree-select-text-hover-primary:hover {
+    color: var(--jqtree-primary);
+}
+
+.jq-tree-select-text-hover-danger:hover {
+    color: var(--jqtree-danger);
+}
+
+.jq-tree-select .jq-tree-select-action-disabled {
+    opacity: 0.4;
+}
+
+.jq-tree-select .jq-tree-select-action-disabled i {
+    cursor: not-allowed !important;
+    color: var(--jqtree-text-muted) !important;
+}
+
+.jq-tree-select .jq-tree-select-action-disabled i:hover {
+    color: var(--jqtree-text-muted) !important;
+}
+
+/* --- Tree Hierarchy Styles --- */
+.jq-tree-select .jq-tree-select-option,
+.jq-tree-select .jq-tree-select-group-header,
+.jq-tree-select .jq-tree-select-subgroup-header {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+}
+
+.jq-tree-select .jq-tree-select-option:hover,
+.jq-tree-select .jq-tree-select-group-header:hover,
+.jq-tree-select .jq-tree-select-subgroup-header:hover {
+    background-color: var(--jqtree-hover-bg);
+}
+
+.jq-tree-select .jq-tree-select-group-wrapper:not(:first-child) {
+    margin-top: 0.4rem;
+    border-top: 1px solid var(--jqtree-border-color);
+    padding-top: 0.4rem;
+}
+
+.jq-tree-select .jq-tree-select-group-header {
+    background-color: transparent !important;
+    border-bottom: none !important;
+}
+
+.jq-tree-select .jq-tree-select-group-header label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--jqtree-text);
+}
+
+.jq-tree-select .jq-tree-select-subgroup-header {
+    background-color: transparent !important;
+}
+
+.jq-tree-select .jq-tree-select-subgroup-header label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--jqtree-text);
+}
+
+/* The lines mapping the tree */
+.jq-tree-select .jq-tree-select-children {
+    margin-left: 0.8rem;
+    padding-left: 0.5rem;
+    border-left: 1px dashed var(--jqtree-border-color);
+    position: relative;
+}
+
+/* The horizontal branch pointing to the item */
+.jq-tree-select .jq-tree-select-node {
+    position: relative;
+}
+
+.jq-tree-select .jq-tree-select-node::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: -0.5rem;
+    width: 0.5rem;
+    border-top: 1px dashed var(--jqtree-border-color);
+}
+
+/* Flat Grouping (Groups but no Subgroups) */
+.jq-tree-select .jq-tree-select-flat-groups .jq-tree-select-children {
+    border-left: none;
+    margin-left: 0.5rem;
+    padding-left: 0;
+}
+
+.jq-tree-select .jq-tree-select-flat-groups .jq-tree-select-node::before {
+    display: none;
+}
+
+/* Search Box Styles */
+.jq-tree-select .jq-tree-select-search-container {
+    padding: 2px 4px;
+}
+
+.jq-tree-select .jq-tree-select-search-input:focus {
+    box-shadow: none;
+    border-color: var(--jqtree-primary);
+}
+
+/* Not Found Alert Styles */
+.jq-tree-select .jq-tree-select-not-found {
+    font-size: 0.85rem;
+    color: var(--jqtree-text-muted);
+    text-align: center;
+    padding: 1.5rem 0.5rem;
+}
+
+/* Collapsible Toggle Styles */
+.jq-tree-select .jq-tree-select-group-toggle {
+    transition: color 0.15s ease, transform 0.15s ease;
+    color: var(--jqtree-text-muted);
+    font-size: 0.8rem;
+    padding: 2px;
+}
+
+.jq-tree-select .jq-tree-select-group-toggle:hover {
+    color: var(--jqtree-primary);
+}
+
+/* Disabled state inside overflow dropdown items */
+.jq-tree-select .dropdown-menu a.jq-tree-select-action-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    color: var(--jqtree-text-muted) !important;
+    cursor: not-allowed !important;
+}
+
+.jq-tree-select .dropdown-menu a.jq-tree-select-action-disabled i {
+    color: var(--jqtree-text-muted) !important;
+}
+
+/* --- Disabled State Styles --- */
+.jq-tree-select.jq-tree-select-disabled {
+    pointer-events: none;
+}
+
+.jq-tree-select .jq-tree-select-display.disabled {
+    background-color: var(--bs-secondary-bg, #e9ecef) !important;
+    opacity: 0.65;
+    cursor: not-allowed !important;
+    border-color: var(--jqtree-border-color) !important;
+    color: var(--jqtree-text-muted) !important;
+    box-shadow: none !important;
+}
+
+.jq-tree-select .jq-tree-select-option-disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+.jq-tree-select .jq-tree-select-option-disabled label {
+    cursor: not-allowed !important;
+}

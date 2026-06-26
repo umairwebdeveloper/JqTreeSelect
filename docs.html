@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WI3BIT Multi-Select Developer Documentation</title>
+    <title>jqTreeSelect Developer Documentation</title>
 
     <!-- Dependencies -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <link rel="stylesheet" href="wi3bit-multi-select.css">
+    <link rel="stylesheet" href="jq-tree-select.css">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -229,6 +229,11 @@
             color: #475569;
         }
 
+        .badge-required {
+            background-color: #fee2e2;
+            color: #ef4444;
+        }
+
         .version-badge {
             background-color: rgba(13, 110, 253, 0.2);
             color: #3b82f6;
@@ -268,8 +273,8 @@
                         <span class="badge version-badge px-3 py-1 rounded-pill">Version 1.2.0</span>
                         <span class="badge bg-success px-3 py-1 rounded-pill"><i class="fa-solid fa-rocket me-1"></i>Production Ready</span>
                     </div>
-                    <h1>WI3BIT Custom Multi-Select</h1>
-                    <p class="lead mt-2">A dynamic, high-performance JQuery plugin that transforms standard selects into tree-nesting, searchable, grouped dropdowns with checkboxes, full keyboard support, and customized styles.</p>
+                    <h1>jqTreeSelect</h1>
+                    <p class="lead mt-2">A dynamic, high-performance JQuery plugin that transforms standard selects into tree-nesting, searchable, grouped dropdowns with checkboxes, full module loader support (UMD), and customized styles.</p>
                     <div class="d-flex gap-3 mt-4 flex-wrap">
                         <a href="#quick-start" class="btn btn-primary btn-lg px-4 py-2"><i class="fa-solid fa-graduation-cap me-2"></i>Getting Started</a>
                         <a href="#interactive-generator" class="btn btn-outline-light btn-lg px-4 py-2"><i class="fa-solid fa-sliders me-2"></i>Live Configurator</a>
@@ -308,7 +313,7 @@
                 <!-- Installation -->
                 <section id="installation" class="docs-section mb-5">
                     <h2 class="border-bottom pb-2 mb-3">Installation<a href="#installation" class="anchor-link">#</a></h2>
-                    <p>Load jQuery (3.x+ recommended), Bootstrap 5 (including dropdowns & tooltips bundle), and FontAwesome 6 icons. Then include the WI3BIT Multi-Select CSS and JavaScript files.</p>
+                    <p>Load jQuery (3.x+ recommended), Bootstrap 5 (including dropdowns & tooltips bundle), and FontAwesome 6 icons. Then include the jqTreeSelect CSS and JavaScript files.</p>
                     
                     <h5 class="mt-4 mb-2">CSS Stylesheet</h5>
                     <div class="code-container">
@@ -317,12 +322,12 @@
 &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
 &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"&gt;
 
-&lt;!-- WI3BIT Custom Styles --&gt;
-&lt;link rel="stylesheet" href="wi3bit-multi-select.css"&gt;</code></pre>
+&lt;!-- jqTreeSelect Custom Styles --&gt;
+&lt;link rel="stylesheet" href="jq-tree-select.css"&gt;</code></pre>
                     </div>
 
                     <h5 class="mt-4 mb-2">Javascript Plugin</h5>
-                    <p>WI3BIT Multi-Select includes a UMD (Universal Module Definition) wrapper, allowing it to load cleanly in standard browsers, AMD modules, and Node/CommonJS module systems.</p>
+                    <p>jqTreeSelect includes a UMD (Universal Module Definition) wrapper, allowing it to load cleanly in standard browsers, AMD modules, and Node/CommonJS module systems.</p>
                     
                     <h6 class="mt-3 mb-1 text-muted">Method A: Standard Browser Inclusion</h6>
                     <div class="code-container">
@@ -331,8 +336,8 @@
 &lt;script src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
 
-&lt;!-- WI3BIT Custom Script --&gt;
-&lt;script src="wi3bit-multi-select.js"&gt;&lt;/script&gt;</code></pre>
+&lt;!-- jqTreeSelect Custom Script --&gt;
+&lt;script src="jq-tree-select.js"&gt;&lt;/script&gt;</code></pre>
                     </div>
 
                     <h6 class="mt-3 mb-1 text-muted">Method B: Webpack / Browserify / CommonJS</h6>
@@ -340,15 +345,15 @@
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
                         <pre><code class="language-javascript">// Import jQuery and the plugin
 const $ = require('jquery');
-require('./wi3bit-multi-select.js')($); // pass jQuery context</code></pre>
+require('./jq-tree-select.js')($); // pass jQuery context</code></pre>
                     </div>
 
                     <h6 class="mt-3 mb-1 text-muted">Method C: RequireJS (AMD)</h6>
                     <div class="code-container">
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
-                        <pre><code class="language-javascript">require(['jquery', 'wi3bit-multi-select'], function($) {
+                        <pre><code class="language-javascript">require(['jquery', 'jq-tree-select'], function($) {
     // Plugin initialized
-    $('#mySelect').wi3bitMultiSelect();
+    $('#mySelect').jqTreeSelect();
 });</code></pre>
                     </div>
                 </section>
@@ -356,15 +361,15 @@ require('./wi3bit-multi-select.js')($); // pass jQuery context</code></pre>
                 <!-- Quick Start -->
                 <section id="quick-start" class="docs-section mb-5">
                     <h2 class="border-bottom pb-2 mb-3">Quick Start &amp; Auto-Init<a href="#quick-start" class="anchor-link">#</a></h2>
-                    <p>WI3BIT Multi-Select can be initialized in two different ways depending on your application needs:</p>
+                    <p>jqTreeSelect can be initialized in two different ways depending on your application needs:</p>
                     
                     <h4 class="mt-4 mb-2 fw-semibold">Method 1: Codeless Auto-Init (Data-API)</h4>
-                    <p>Simply add the attribute <code>data-toggle="wi3bit-multi-select"</code> to your native multi-select element. The plugin will automatically instantiate it when the document loads, reading configuration options directly from any <code>data-*</code> attributes defined on the element.</p>
+                    <p>Simply add the attribute <code>data-toggle="jq-tree-select"</code> to your native multi-select element. The plugin will automatically instantiate it when the document loads, reading configuration options directly from any <code>data-*</code> attributes defined on the element.</p>
                     <div class="code-container">
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
                         <pre><code class="language-html">&lt;!-- Auto-initialized tree with search enabled, width 320px --&gt;
 &lt;select class="form-control" multiple 
-        data-toggle="wi3bit-multi-select" 
+        data-toggle="jq-tree-select" 
         data-search-enabled="true"
         data-layout-width="320px"&gt;
     &lt;option value="1"&gt;Option A&lt;/option&gt;
@@ -373,7 +378,7 @@ require('./wi3bit-multi-select.js')($); // pass jQuery context</code></pre>
                     </div>
 
                     <h4 class="mt-4 mb-2 fw-semibold">Method 2: Programmatic JQuery Call</h4>
-                    <p>Instantiate options programmatically by calling <code>.wi3bitMultiSelect()</code> on your jQuery selectors.</p>
+                    <p>Instantiate options programmatically by calling <code>.jqTreeSelect()</code> on your jQuery selectors.</p>
                     <div class="code-container">
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
                         <pre><code class="language-html">&lt;select id="manualSelect" class="form-control" multiple&gt;
@@ -384,7 +389,7 @@ require('./wi3bit-multi-select.js')($); // pass jQuery context</code></pre>
                     <div class="code-container">
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
                         <pre><code class="language-javascript">$(document).ready(function() {
-    $('#manualSelect').wi3bitMultiSelect({
+    $('#manualSelect').jqTreeSelect({
         search: {
             enabled: true
         },
@@ -761,7 +766,7 @@ require('./wi3bit-multi-select.js')($); // pass jQuery context</code></pre>
                     <h5 class="mt-4 mb-2">1. Flat List Format</h5>
                     <div class="code-container">
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
-                        <pre><code class="language-javascript">$('#mySelect').wi3bitMultiSelect({
+                        <pre><code class="language-javascript">$('#mySelect').jqTreeSelect({
     data: [
         { value: "1", text: "Alpha Node" },
         { value: "2", text: "Beta Node", selected: true },
@@ -773,7 +778,7 @@ require('./wi3bit-multi-select.js')($); // pass jQuery context</code></pre>
                     <h5 class="mt-4 mb-2">2. Single-level Grouping</h5>
                     <div class="code-container">
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
-                        <pre><code class="language-javascript">$('#mySelect').wi3bitMultiSelect({
+                        <pre><code class="language-javascript">$('#mySelect').jqTreeSelect({
     grouping: { nested: true },
     data: [
         {
@@ -799,7 +804,7 @@ require('./wi3bit-multi-select.js')($); // pass jQuery context</code></pre>
                     <p>Provide a <code>groupPath</code> (using slashes <code>/</code>) to nested folders. The plugin programmatically compiles nodes and subnodes to arbitrary depth.</p>
                     <div class="code-container">
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
-                        <pre><code class="language-javascript">$('#mySelect').wi3bitMultiSelect({
+                        <pre><code class="language-javascript">$('#mySelect').jqTreeSelect({
     grouping: { 
         nested: true,
         collapsible: true
@@ -844,27 +849,27 @@ require('./wi3bit-multi-select.js')($); // pass jQuery context</code></pre>
                             <tbody>
                                 <tr>
                                     <td><code>onInit</code></td>
-                                    <td><code>wi3bit:init</code></td>
+                                    <td><code>jqtree:init</code></td>
                                     <td>Widget layout is rendered and ready.</td>
                                 </tr>
                                 <tr>
                                     <td><code>onOpen</code></td>
-                                    <td><code>wi3bit:open</code></td>
+                                    <td><code>jqtree:open</code></td>
                                     <td>Dropdown panel opens.</td>
                                 </tr>
                                 <tr>
                                     <td><code>onClose</code></td>
-                                    <td><code>wi3bit:close</code></td>
+                                    <td><code>jqtree:close</code></td>
                                     <td>Dropdown panel closes.</td>
                                 </tr>
                                 <tr>
                                     <td><code>onChange</code></td>
-                                    <td><code>wi3bit:change</code></td>
+                                    <td><code>jqtree:change</code></td>
                                     <td>Checked option changes. Passes array of selected values.</td>
                                 </tr>
                                 <tr>
                                     <td><code>onDestroy</code></td>
-                                    <td><code>wi3bit:destroy</code></td>
+                                    <td><code>jqtree:destroy</code></td>
                                     <td>Widget layout is destroyed and replaced with native select.</td>
                                 </tr>
                             </tbody>
@@ -875,7 +880,7 @@ require('./wi3bit-multi-select.js')($); // pass jQuery context</code></pre>
                     <div class="code-container">
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
                         <pre><code class="language-javascript">// Method A: JavaScript callbacks parameter
-$('#mySelect').wi3bitMultiSelect({
+$('#mySelect').jqTreeSelect({
     callbacks: {
         onChange: function(detail) {
             console.log("Selected values array: ", detail.selectedValues);
@@ -884,7 +889,7 @@ $('#mySelect').wi3bitMultiSelect({
 });
 
 // Method B: Standard JQuery event listeners
-$('#mySelect').on('wi3bit:change', function(event, detail) {
+$('#mySelect').on('jqtree:change', function(event, detail) {
     console.log("Change registered on DOM: ", detail.selectedValues);
 });</code></pre>
                     </div>
@@ -907,67 +912,67 @@ $('#mySelect').on('wi3bit:change', function(event, detail) {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('val')</code></td>
+                                    <td><code>.jqTreeSelect('val')</code></td>
                                     <td>None</td>
                                     <td><code>Array</code></td>
                                     <td>Returns array of currently selected values.</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('val', Array)</code></td>
+                                    <td><code>.jqTreeSelect('val', Array)</code></td>
                                     <td><code>['val1', 'val2']</code></td>
                                     <td><code>jQuery Object</code></td>
                                     <td>Sets current selections and updates UI.</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('selectAll')</code></td>
+                                    <td><code>.jqTreeSelect('selectAll')</code></td>
                                     <td>None</td>
                                     <td>None</td>
                                     <td>Checks all non-disabled visible options.</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('clear')</code></td>
+                                    <td><code>.jqTreeSelect('clear')</code></td>
                                     <td>None</td>
                                     <td>None</td>
                                     <td>Unchecks all non-disabled options.</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('reset')</code></td>
+                                    <td><code>.jqTreeSelect('reset')</code></td>
                                     <td>None</td>
                                     <td>None</td>
                                     <td>Resets options to default state during page load.</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('expandAll')</code></td>
+                                    <td><code>.jqTreeSelect('expandAll')</code></td>
                                     <td>None</td>
                                     <td>None</td>
                                     <td>Expands all subgroups (if <code>collapsible: true</code>).</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('collapseAll')</code></td>
+                                    <td><code>.jqTreeSelect('collapseAll')</code></td>
                                     <td>None</td>
                                     <td>None</td>
                                     <td>Collapses all subgroups.</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('disable')</code></td>
+                                    <td><code>.jqTreeSelect('disable')</code></td>
                                     <td>None</td>
                                     <td>None</td>
                                     <td>Disables dropdown interactions and adds visual opacity.</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('enable')</code></td>
+                                    <td><code>.jqTreeSelect('enable')</code></td>
                                     <td>None</td>
                                     <td>None</td>
                                     <td>Enables dropdown interactions.</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('refresh')</code></td>
+                                    <td><code>.jqTreeSelect('refresh')</code></td>
                                     <td>None</td>
                                     <td>None</td>
                                     <td>Destroys and fully rebuilds layout from original select.</td>
                                 </tr>
                                 <tr>
-                                    <td><code>.wi3bitMultiSelect('destroy')</code></td>
+                                    <td><code>.jqTreeSelect('destroy')</code></td>
                                     <td>None</td>
                                     <td>None</td>
                                     <td>Cleans layout wrappers, tooltips, and recovers native element display.</td>
@@ -980,16 +985,16 @@ $('#mySelect').on('wi3bit:change', function(event, detail) {
                     <div class="code-container">
                         <button class="btn-copy" onclick="copyCode(this)">Copy</button>
                         <pre><code class="language-javascript">// Clear all selections
-$('#mySelect').wi3bitMultiSelect('clear');
+$('#mySelect').jqTreeSelect('clear');
 
 // Fetch current values
-let currentList = $('#mySelect').wi3bitMultiSelect('val');
+let currentList = $('#mySelect').jqTreeSelect('val');
 console.log(currentList);</code></pre>
                     </div>
                 </section>
 
                 <footer class="text-center mt-5 pt-4 border-top text-muted small">
-                    <p class="mb-1">&copy; 2026 WI3BIT Multi-Select. Released under the MIT License.</p>
+                    <p class="mb-1">&copy; 2026 jqTreeSelect. Released under the MIT License.</p>
                     <p>Designed for premium, high-performance web dashboard application systems.</p>
                 </footer>
 
@@ -1001,7 +1006,7 @@ console.log(currentList);</code></pre>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="wi3bit-multi-select.js"></script>
+    <script src="jq-tree-select.js"></script>
 
     <script>
         // Copy Code Script
@@ -1081,7 +1086,7 @@ console.log(currentList);</code></pre>
                 }
 
                 // JS Code String Generation
-                let jsStr = `$('#mySelect').wi3bitMultiSelect({\n`;
+                let jsStr = `$('#mySelect').jqTreeSelect({\n`;
                 jsStr += `    layout: {\n`;
                 jsStr += `        width: '${layoutWidth}',\n`;
                 jsStr += `        dropdownHeight: '${layoutDropdownHeight}'\n`;
@@ -1125,7 +1130,7 @@ console.log(currentList);</code></pre>
 
                 // Re-initialize Live Widget dropdown
                 let $sel = $('#configuratorSelect');
-                $sel.wi3bitMultiSelect({
+                $sel.jqTreeSelect({
                     layout: {
                         width: '100%',
                         dropdownHeight: layoutDropdownHeight
