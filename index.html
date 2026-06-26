@@ -89,11 +89,20 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
-                        <h5 class="card-title mb-3">Single Select (Ignored)</h5>
-                        <select id="singleSelect" class="form-control">
-                            <option value="1">Option A</option>
-                            <option value="2">Option B</option>
-                            <option value="3">Option C</option>
+                        <h5 class="card-title mb-3">Unlimited Levels Tree</h5>
+                        <select id="unlimitedSelect" class="form-control" multiple data-placeholder="Choose permissions...">
+                            <option value="">Select permissions... (value="")</option>
+                            <option value="1" data-group-path="Administration/User Management/Write Operations">Create Users</option>
+                            <option value="2" data-group-path="Administration/User Management/Write Operations" selected>Delete Users</option>
+                            <option value="3" data-group-path="Administration/User Management/Read Operations">View Users List</option>
+                            <option value="4" data-group-path="Administration/System Settings/Security">Edit Configurations</option>
+                            <option value="5" data-group-path="Administration/System Settings/Audit Log">View Audit Logs</option>
+                            
+                            <option value="6" data-group-path="Content Editors/Blog Posts/Drafts">Draft Posts</option>
+                            <option value="7" data-group-path="Content Editors/Blog Posts/Published">Publish Posts</option>
+                            <option value="8" data-group-path="Content Editors/Media Library" selected>Upload Images</option>
+                            
+                            <option value="9" data-group-path="Miscellaneous">General Access</option>
                         </select>
                     </div>
                 </div>
@@ -121,6 +130,10 @@
                             <div>
                                 <strong>AJAX List:</strong>
                                 <span id="ajaxSelectedVal" class="text-muted ms-2">None</span>
+                            </div>
+                            <div>
+                                <strong>Unlimited Tree:</strong>
+                                <span id="unlimitedSelectedVal" class="text-muted ms-2">None</span>
                             </div>
                         </div>
                     </div>
@@ -155,7 +168,13 @@
                 showTotalCount: true,
                 dropdownHeight: '200px'
             });
-            $('#singleSelect').wi3bitMultiSelect();
+            $('#unlimitedSelect').wi3bitMultiSelect({ 
+                nestedGroups: true, 
+                showReset: true,
+                showSearch: true,
+                showTotalCount: true,
+                dropdownHeight: '300px'
+            });
 
             // Demo script: log selected values in real-time
             function logValues(selectId, logId) {
@@ -163,11 +182,12 @@
                 $(logId).text(val.length > 0 ? JSON.stringify(val) : 'None');
             }
 
-            $('#simpleSelect, #groupSelect, #nestedSelect, #ajaxSelect').on('change', function() {
+            $('#simpleSelect, #groupSelect, #nestedSelect, #ajaxSelect, #unlimitedSelect').on('change', function() {
                 logValues('#simpleSelect', '#simpleSelectedVal');
                 logValues('#groupSelect', '#groupSelectedVal');
                 logValues('#nestedSelect', '#nestedSelectedVal');
                 logValues('#ajaxSelect', '#ajaxSelectedVal');
+                logValues('#unlimitedSelect', '#unlimitedSelectedVal');
             });
 
             // Fetch users from dummy API (JSONPlaceholder) via jQuery AJAX
@@ -213,6 +233,7 @@
             logValues('#groupSelect', '#groupSelectedVal');
             logValues('#nestedSelect', '#nestedSelectedVal');
             logValues('#ajaxSelect', '#ajaxSelectedVal');
+            logValues('#unlimitedSelect', '#unlimitedSelectedVal');
         });
     </script>
 </body>

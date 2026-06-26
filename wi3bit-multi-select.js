@@ -197,21 +197,9 @@
                                         .toLowerCase();
                                     if (optionText.indexOf(query) > -1) {
                                         $(this).show();
-                                        $(this)
-                                            .parents(".wi3bit-subgroup-wrapper")
-                                            .show();
-                                        $(this)
-                                            .parents(".wi3bit-subgroup-wrapper")
-                                            .find(".wi3bit-subgroup-header")
-                                            .show();
-                                        $(this)
-                                            .parents(".wi3bit-group-wrapper")
-                                            .show();
-                                        $(this)
-                                            .parents(".wi3bit-group-wrapper")
-                                            .find(".wi3bit-group-header")
-                                            .first()
-                                            .show();
+                                        let $ancestors = $(this).parents(".wi3bit-subgroup-wrapper, .wi3bit-group-wrapper");
+                                        $ancestors.show();
+                                        $ancestors.children(".wi3bit-subgroup-header, .wi3bit-group-header").show();
                                     }
                                 });
 
@@ -340,10 +328,11 @@
             }
 
             if (settings.nestedGroups) {
-                let hierarchy = {};
-                let hasSubgroups = false;
+                let tree = {
+                    children: {},
+                    options: []
+                };
 
-                // 1. Build hierarchy object
                 $originalSelect.find("option").each(function () {
                     let valAttr = $(this).attr("value");
                     if (
@@ -353,118 +342,142 @@
                     ) {
                         return;
                     }
-                    let gId = $(this).data("group-id") || "root";
-                    let gName = $(this).data("group-name") || "Other";
-                    let sgId = $(this).data("subgroup-id") || "root_sub";
-                    let sgName = $(this).data("subgroup-name") || "";
 
-                    if ($(this).data("subgroup-id")) {
-                        hasSubgroups = true;
+                    let namesPath = [];
+                    let idsPath = [];
+
+                    let groupPath = $(this).data("group-path");
+                    if (groupPath) {
+                        namesPath = groupPath.split("/").map(s => s.trim()).filter(Boolean);
+                        let idPathAttr = $(this).data("group-id-path");
+                        if (idPathAttr) {
+                            idsPath = idPathAttr.split("/").map(s => s.trim()).filter(Boolean);
+                        } else {
+                            idsPath = namesPath.map(name => name.toLowerCase().replace(/[^a-z0-9_-]/g, "_"));
+                        }
+                    } else {
+                        let gName = $(this).data("group-name");
+                        let gId = $(this).data("group-id");
+                        let sgName = $(this).data("subgroup-name");
+                        let sgId = $(this).data("subgroup-id");
+
+                        if (gName || gId) {
+                            let name = gName || "Other";
+                            let id = gId || name.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+                            namesPath.push(name);
+                            idsPath.push(id);
+
+                            if (sgName || sgId) {
+                                let subName = sgName || "";
+                                let subId = sgId || subName.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+                                namesPath.push(subName);
+                                idsPath.push(subId);
+                            }
+                        }
                     }
 
-                    if (!hierarchy[gId]) {
-                        hierarchy[gId] = { name: gName, subgroups: {} };
-                    }
-                    if (!hierarchy[gId].subgroups[sgId]) {
-                        hierarchy[gId].subgroups[sgId] = {
-                            name: sgName,
-                            options: [],
-                        };
+                    let current = tree;
+                    let currentIdPath = "";
+                    for (let i = 0; i < namesPath.length; i++) {
+                        let name = namesPath[i];
+                        let id = idsPath[i] || name.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+                        currentIdPath = currentIdPath ? currentIdPath + "_" + id : id;
+
+                        if (!current.children[id]) {
+                            current.children[id] = {
+                                id: id,
+                                name: name,
+                                fullIdPath: currentIdPath,
+                                checkboxId: "grp_" + Math.random().toString(36).substr(2, 9),
+                                children: {},
+                                options: []
+                            };
+                        }
+                        current = current.children[id];
                     }
 
-                    hierarchy[gId].subgroups[sgId].options.push($(this));
+                    current.options.push($(this));
                 });
 
-                if (!hasSubgroups) {
-                    $optionsContainer.addClass("wi3bit-flat-groups");
-                }
+                function renderOption($optTag, parentIdPath) {
+                    let val = $optTag.val();
+                    let text = $optTag.text();
+                    let isChecked = $optTag.is(":selected") ? "checked" : "";
+                    let uid = "opt_" + Math.random().toString(36).substr(2, 9);
 
-                // 2. Render Tree HTML
-                for (let gId in hierarchy) {
-                    let gData = hierarchy[gId];
-                    let safeGId = gId.replace(/[^a-zA-Z0-9_-]/g, "_");
-                    let chkG1Id =
-                        "grp1_" + Math.random().toString(36).substr(2, 9);
-
-                    let $groupWrapper = $(
-                        '<div class="wi3bit-group-wrapper mb-2"></div>',
-                    );
-
-                    let $groupHeader = $(`
-                        <div class="dropdown-header wi3bit-group-header px-2 py-2 d-flex align-items-center">
+                    return $(`
+                        <div class="wi3bit-select-option py-2 px-2 m-0 wi3bit-tree-node">
                             <div class="form-check m-0">
-                                <input class="form-check-input group-1-checkbox" type="checkbox" id="${chkG1Id}" data-g1-id="${safeGId}">
-                                <label class="form-check-label w-100 fw-bold" for="${chkG1Id}" style="cursor:pointer;">${gData.name}</label>
+                                <input class="form-check-input select-checkbox" type="checkbox" value="${val}" id="${uid}" data-parent-path="${parentIdPath}" ${isChecked}>
+                                <label class="form-check-label w-100" for="${uid}" style="cursor:pointer;">${text}</label>
                             </div>
                         </div>
                     `);
-                    $groupWrapper.append($groupHeader);
+                }
 
-                    // Subgroups container (creates the vertical line)
-                    let $subgroupsContainer = $(
-                        '<div class="wi3bit-tree-children"></div>',
-                    );
-
-                    for (let sgId in gData.subgroups) {
-                        let sgData = gData.subgroups[sgId];
-                        let safeSgId = sgId.replace(/[^a-zA-Z0-9_-]/g, "_");
-
-                        let $subgroupWrapper = $(
-                            '<div class="wi3bit-subgroup-wrapper wi3bit-tree-node"></div>',
-                        );
-                        let $optionsListContainer = $subgroupWrapper;
-
-                        if (sgData.name) {
-                            let chkG2Id =
-                                "grp2_" +
-                                Math.random().toString(36).substr(2, 9);
-                            let $subgroupHeader = $(`
-                                <div class="dropdown-header wi3bit-subgroup-header px-2 py-2">
-                                    <div class="form-check m-0">
-                                        <input class="form-check-input group-2-checkbox" type="checkbox" id="${chkG2Id}" data-g2-id="${safeSgId}" data-g1-parent="${safeGId}">
-                                        <label class="form-check-label w-100 fw-bold" for="${chkG2Id}" style="cursor:pointer;">
-                                            ${sgData.name}
-                                        </label>
-                                    </div>
+                function renderNode(node, depth) {
+                    if (depth === 1) {
+                        let $groupWrapper = $('<div class="wi3bit-group-wrapper mb-2"></div>');
+                        let $groupHeader = $(`
+                            <div class="dropdown-header wi3bit-group-header px-2 py-2 d-flex align-items-center">
+                                <div class="form-check m-0">
+                                    <input class="form-check-input group-checkbox" type="checkbox" id="${node.checkboxId}" data-full-path="${node.fullIdPath}">
+                                    <label class="form-check-label w-100 fw-bold" for="${node.checkboxId}" style="cursor:pointer;">${node.name}</label>
                                 </div>
-                            `);
-                            $subgroupWrapper.append($subgroupHeader);
+                            </div>
+                        `);
+                        $groupWrapper.append($groupHeader);
 
-                            $optionsListContainer = $(
-                                '<div class="wi3bit-tree-children"></div>',
-                            );
-                            $subgroupWrapper.append($optionsListContainer);
-                        } else {
-                            $subgroupWrapper.removeClass("wi3bit-tree-node");
+                        let $childrenContainer = $('<div class="wi3bit-tree-children"></div>');
+                        
+                        for (let subId in node.children) {
+                            $childrenContainer.append(renderNode(node.children[subId], depth + 1));
                         }
 
-                        sgData.options.forEach(function ($optTag) {
-                            let val = $optTag.val();
-                            let text = $optTag.text();
-                            let isChecked = $optTag.is(":selected")
-                                ? "checked"
-                                : "";
-                            let uid =
-                                "opt_" +
-                                Math.random().toString(36).substr(2, 9);
-
-                            let $opt = $(`
-                                <div class="wi3bit-select-option py-2 px-2 m-0 wi3bit-tree-node">
-                                    <div class="form-check m-0">
-                                        <input class="form-check-input select-checkbox" type="checkbox" value="${val}" id="${uid}" data-g1-parent="${safeGId}" data-g2-parent="${safeSgId}" ${isChecked}>
-                                        <label class="form-check-label w-100" for="${uid}" style="cursor:pointer;">${text}</label>
-                                    </div>
-                                </div>
-                            `);
-                            $optionsListContainer.append($opt);
+                        node.options.forEach(function ($optTag) {
+                            $childrenContainer.append(renderOption($optTag, node.fullIdPath));
                         });
 
-                        $subgroupsContainer.append($subgroupWrapper);
-                    }
+                        $groupWrapper.append($childrenContainer);
+                        return $groupWrapper;
+                    } else {
+                        let $subgroupWrapper = $('<div class="wi3bit-subgroup-wrapper wi3bit-tree-node"></div>');
+                        let $subgroupHeader = $(`
+                            <div class="dropdown-header wi3bit-subgroup-header px-2 py-2">
+                                <div class="form-check m-0">
+                                    <input class="form-check-input group-checkbox" type="checkbox" id="${node.checkboxId}" data-full-path="${node.fullIdPath}">
+                                    <label class="form-check-label w-100 fw-bold" for="${node.checkboxId}" style="cursor:pointer;">
+                                        ${node.name}
+                                    </label>
+                                </div>
+                            </div>
+                        `);
+                        $subgroupWrapper.append($subgroupHeader);
 
-                    $groupWrapper.append($subgroupsContainer);
-                    $optionsContainer.append($groupWrapper);
+                        let $childrenContainer = $('<div class="wi3bit-tree-children"></div>');
+
+                        for (let subId in node.children) {
+                            $childrenContainer.append(renderNode(node.children[subId], depth + 1));
+                        }
+
+                        node.options.forEach(function ($optTag) {
+                            $childrenContainer.append(renderOption($optTag, node.fullIdPath));
+                        });
+
+                        $subgroupWrapper.append($childrenContainer);
+                        return $subgroupWrapper;
+                    }
                 }
+
+                // Render all top-level groups
+                for (let gId in tree.children) {
+                    $optionsContainer.append(renderNode(tree.children[gId], 1));
+                }
+                
+                // Render any top-level options that don't belong to any group
+                tree.options.forEach(function ($optTag) {
+                    $optionsContainer.append(renderOption($optTag, ""));
+                });
             } else {
                 $originalSelect.find("option").each(function () {
                     let valAttr = $(this).attr("value");
@@ -501,100 +514,61 @@
 
             $originalSelect.data("wi3bit-multi-select-wrapper", $wrapper);
 
-            function syncChainUp() {
-                if (!settings.nestedGroups) return;
+            function syncParents($elem) {
+                let $parentContainer = $elem.closest(".wi3bit-tree-children");
+                if ($parentContainer.length === 0) return;
 
-                let $allSelectCheckboxes =
-                    $optionsContainer.find(".select-checkbox");
+                let $parentHeader = $parentContainer.prev(".wi3bit-group-header, .wi3bit-subgroup-header");
+                if ($parentHeader.length === 0) return;
 
-                $optionsContainer.find(".group-2-checkbox").each(function () {
-                    let sgId = $(this).data("g2-id");
-                    let $children = $allSelectCheckboxes.filter(
-                        `[data-g2-parent="${sgId}"]`,
-                    );
-                    if ($children.length > 0) {
-                        let checkedCount = $children.filter(":checked").length;
-                        let allChecked = checkedCount === $children.length;
-                        let noneChecked = checkedCount === 0;
+                let $parentCheckbox = $parentHeader.find(".group-checkbox");
+                if ($parentCheckbox.length === 0) return;
 
-                        $(this).prop("checked", allChecked);
-                        $(this).prop(
-                            "indeterminate",
-                            !allChecked && !noneChecked,
-                        );
-                    }
-                });
+                let $leafCheckboxes = $parentContainer.find(".select-checkbox");
+                let total = $leafCheckboxes.length;
+                let checked = $leafCheckboxes.filter(":checked").length;
 
-                $optionsContainer.find(".group-1-checkbox").each(function () {
-                    let gId = $(this).data("g1-id");
-                    let $children = $allSelectCheckboxes.filter(
-                        `[data-g1-parent="${gId}"]`,
-                    );
-                    if ($children.length > 0) {
-                        let checkedCount = $children.filter(":checked").length;
-                        let allChecked = checkedCount === $children.length;
-                        let noneChecked = checkedCount === 0;
+                if (checked === total) {
+                    $parentCheckbox.prop("checked", true).prop("indeterminate", false);
+                } else if (checked === 0) {
+                    $parentCheckbox.prop("checked", false).prop("indeterminate", false);
+                } else {
+                    $parentCheckbox.prop("checked", false).prop("indeterminate", true);
+                }
 
-                        $(this).prop("checked", allChecked);
-                        $(this).prop(
-                            "indeterminate",
-                            !allChecked && !noneChecked,
-                        );
-                    }
-                });
+                syncParents($parentCheckbox);
             }
 
-            function syncChainForOption($optionCheckbox) {
-                let g2Id = $optionCheckbox.data("g2-parent");
-                let g1Id = $optionCheckbox.data("g1-parent");
+            function syncAllGroups() {
+                let $containers = $optionsContainer.find(".wi3bit-tree-children");
+                $containers.each(function () {
+                    let depth = $(this).parents(".wi3bit-tree-children").length;
+                    $(this).data("depth", depth);
+                });
 
-                if (g2Id) {
-                    let $g2Checkbox = $optionsContainer.find(
-                        `.group-2-checkbox[data-g2-id="${g2Id}"]`,
-                    );
-                    let $siblings = $optionsContainer.find(
-                        `.select-checkbox[data-g2-parent="${g2Id}"]`,
-                    );
-                    let checkedCount = $siblings.filter(":checked").length;
-                    let allChecked = checkedCount === $siblings.length;
-                    let noneChecked = checkedCount === 0;
-                    $g2Checkbox
-                        .prop("checked", allChecked)
-                        .prop("indeterminate", !allChecked && !noneChecked);
-                }
+                let sortedContainers = $containers.get().sort((a, b) => {
+                    return $(b).data("depth") - $(a).data("depth");
+                });
 
-                if (g1Id) {
-                    let $g1Checkbox = $optionsContainer.find(
-                        `.group-1-checkbox[data-g1-id="${g1Id}"]`,
-                    );
-                    let $siblings = $optionsContainer.find(
-                        `.select-checkbox[data-g1-parent="${g1Id}"]`,
-                    );
-                    let checkedCount = $siblings.filter(":checked").length;
-                    let allChecked = checkedCount === $siblings.length;
-                    let noneChecked = checkedCount === 0;
-                    $g1Checkbox
-                        .prop("checked", allChecked)
-                        .prop("indeterminate", !allChecked && !noneChecked);
-                }
-            }
+                $(sortedContainers).each(function () {
+                    let $parentHeader = $(this).prev(".wi3bit-group-header, .wi3bit-subgroup-header");
+                    if ($parentHeader.length === 0) return;
 
-            function syncChainForGroup2($g2Checkbox) {
-                let g1Id = $g2Checkbox.data("g1-parent");
-                if (g1Id) {
-                    let $g1Checkbox = $optionsContainer.find(
-                        `.group-1-checkbox[data-g1-id="${g1Id}"]`,
-                    );
-                    let $siblings = $optionsContainer.find(
-                        `.select-checkbox[data-g1-parent="${g1Id}"]`,
-                    );
-                    let checkedCount = $siblings.filter(":checked").length;
-                    let allChecked = checkedCount === $siblings.length;
-                    let noneChecked = checkedCount === 0;
-                    $g1Checkbox
-                        .prop("checked", allChecked)
-                        .prop("indeterminate", !allChecked && !noneChecked);
-                }
+                    let $parentCheckbox = $parentHeader.find(".group-checkbox");
+                    if ($parentCheckbox.length === 0) return;
+
+                    let $leafCheckboxes = $(this).find(".select-checkbox");
+                    let total = $leafCheckboxes.length;
+                    let checked = $leafCheckboxes.filter(":checked").length;
+
+                    if (checked === total && total > 0) {
+                        $parentCheckbox.prop("checked", true).prop("indeterminate", false);
+                    } else if (checked === 0) {
+                        $parentCheckbox.prop("checked", false).prop("indeterminate", false);
+                    } else {
+                        $parentCheckbox.prop("checked", false).prop("indeterminate", true);
+                    }
+                });
             }
 
             function getSmartSelectedText() {
@@ -612,85 +586,34 @@
 
                 let summaryItems = [];
 
-                $optionsContainer
-                    .find(".wi3bit-group-wrapper")
-                    .each(function () {
-                        let $g1Checkbox = $(this)
-                            .find(".group-1-checkbox")
-                            .first();
-                        let g1Name = $g1Checkbox
-                            .siblings("label")
-                            .text()
-                            .trim();
+                $optionsContainer.children(".wi3bit-group-wrapper").each(function () {
+                    processSummaryNode($(this));
+                });
 
-                        if (
-                            $g1Checkbox.length &&
-                            $g1Checkbox.prop("checked") &&
-                            !$g1Checkbox.prop("indeterminate")
-                        ) {
-                            summaryItems.push(g1Name);
-                        } else {
-                            let $subgroupContainers = $(this).find(
-                                ".wi3bit-subgroup-wrapper",
-                            );
+                $optionsContainer.children(".wi3bit-select-option").each(function () {
+                    let $chk = $(this).find(".select-checkbox");
+                    if ($chk.prop("checked")) {
+                        summaryItems.push($(this).find("label").text().trim());
+                    }
+                });
 
-                            if ($subgroupContainers.length > 0) {
-                                $subgroupContainers.each(function () {
-                                    let $g2Checkbox = $(this)
-                                        .find(".group-2-checkbox")
-                                        .first();
-
-                                    if ($g2Checkbox.length) {
-                                        let g2Name = $g2Checkbox
-                                            .siblings("label")
-                                            .text()
-                                            .trim();
-                                        if (
-                                            $g2Checkbox.prop("checked") &&
-                                            !$g2Checkbox.prop("indeterminate")
-                                        ) {
-                                            summaryItems.push(g2Name);
-                                        } else {
-                                            $(this)
-                                                .find(
-                                                    ".select-checkbox:checked",
-                                                )
-                                                .each(function () {
-                                                    summaryItems.push(
-                                                        $(this)
-                                                            .siblings("label")
-                                                            .text()
-                                                            .trim(),
-                                                    );
-                                                });
-                                        }
-                                    } else {
-                                        $(this)
-                                            .find(".select-checkbox:checked")
-                                            .each(function () {
-                                                summaryItems.push(
-                                                    $(this)
-                                                        .siblings("label")
-                                                        .text()
-                                                        .trim(),
-                                                );
-                                            });
-                                    }
-                                });
-                            } else {
-                                $(this)
-                                    .find(".select-checkbox:checked")
-                                    .each(function () {
-                                        summaryItems.push(
-                                            $(this)
-                                                .siblings("label")
-                                                .text()
-                                                .trim(),
-                                        );
-                                    });
+                function processSummaryNode($wrapper) {
+                    let $checkbox = $wrapper.children(".wi3bit-group-header, .wi3bit-subgroup-header").find(".group-checkbox");
+                    if ($checkbox.length && $checkbox.prop("checked") && !$checkbox.prop("indeterminate")) {
+                        summaryItems.push($checkbox.siblings("label").text().trim());
+                    } else {
+                        let $childrenContainer = $wrapper.children(".wi3bit-tree-children");
+                        $childrenContainer.children(".wi3bit-subgroup-wrapper").each(function () {
+                            processSummaryNode($(this));
+                        });
+                        $childrenContainer.children(".wi3bit-select-option").each(function () {
+                            let $chk = $(this).find(".select-checkbox");
+                            if ($chk.prop("checked")) {
+                                summaryItems.push($(this).find("label").text().trim());
                             }
-                        }
-                    });
+                        });
+                    }
+                }
 
                 return summaryItems.join(", ");
             }
@@ -763,13 +686,9 @@
                 $originalSelect.val(selectedValues).trigger("change");
 
                 if ($changedElem && settings.nestedGroups) {
-                    if ($changedElem.hasClass("select-checkbox")) {
-                        syncChainForOption($changedElem);
-                    } else if ($changedElem.hasClass("group-2-checkbox")) {
-                        syncChainForGroup2($changedElem);
-                    }
-                } else {
-                    syncChainUp();
+                    syncParents($changedElem);
+                } else if (settings.nestedGroups) {
+                    syncAllGroups();
                 }
 
                 let $btnAllIcon = $wrapper.find(".fa-check-double");
@@ -847,26 +766,11 @@
                 updateUI($(this));
             });
 
-            $optionsContainer.on("change", ".group-2-checkbox", function () {
+            $optionsContainer.on("change", ".group-checkbox", function () {
                 let isChecked = $(this).prop("checked");
-                $optionsContainer
-                    .find(
-                        `.select-checkbox[data-g2-parent="${$(this).data("g2-id")}"]`,
-                    )
-                    .prop("checked", isChecked);
+                let $childrenContainer = $(this).closest(".wi3bit-group-header, .wi3bit-subgroup-header").next(".wi3bit-tree-children");
+                $childrenContainer.find('input[type="checkbox"]').prop("checked", isChecked).prop("indeterminate", false);
                 updateUI($(this));
-            });
-
-            $optionsContainer.on("change", ".group-1-checkbox", function () {
-                let isChecked = $(this).prop("checked");
-                let gId = $(this).data("g1-id");
-                $optionsContainer
-                    .find(`.group-2-checkbox[data-g1-parent="${gId}"]`)
-                    .prop("checked", isChecked);
-                $optionsContainer
-                    .find(`.select-checkbox[data-g1-parent="${gId}"]`)
-                    .prop("checked", isChecked);
-                updateUI();
             });
         });
     };
