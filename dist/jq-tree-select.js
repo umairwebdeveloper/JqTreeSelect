@@ -1009,6 +1009,7 @@
         }
 
         syncParents($checkbox) {
+            if (!$checkbox || typeof $checkbox.closest !== "function") return;
             let $parentContainer = $checkbox.closest(".jq-tree-select-children");
             if ($parentContainer.length === 0) return;
 
@@ -1230,7 +1231,7 @@
                 this.$originalSelect.val(selectedValues).trigger("change");
             }
 
-            if ($changedElem && $changedElem !== true && this.settings.grouping.nested) {
+            if ($changedElem && typeof $changedElem.closest === "function" && this.settings.grouping.nested) {
                 this.syncParents($changedElem);
             } else if (this.settings.grouping.nested) {
                 this.syncAllGroups();
