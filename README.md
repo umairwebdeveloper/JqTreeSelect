@@ -10,7 +10,7 @@
 ![Version](https://img.shields.io/badge/version-1.2.0-green)
 ![Production Ready](https://img.shields.io/badge/production-ready-brightgreen)
 
-[**📖 Documentation**](https://umairwebdeveloper.github.io/JqTreeSelect/docs-site/index.html) · [**🎮 Live Demo**](https://umairwebdeveloper.github.io/JqTreeSelect/docs-site/demo.html)
+[**📖 Documentation**](https://umairwebdeveloper.github.io/JqTreeSelect/) · [**🎮 Live Demo**](https://umairwebdeveloper.github.io/JqTreeSelect/demo.html)
 
 </div>
 
