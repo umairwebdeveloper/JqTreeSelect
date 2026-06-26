@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Multi-Select Tree</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="wi3bit-multi-select.css">
+</head>
+<body class="bg-light p-5">
+
+    <div class="container">
+        <h2 class="mb-4">Dynamic Custom Multi-Select</h2>
+        
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Simple List (No Groups)</h5>
+                        <select id="simpleSelect" class="form-control" multiple>
+                            <option value="">Placeholder option (value="")</option>
+                            <option>Placeholder option (no value attr)</option>
+                            <option value="1">Option A</option>
+                            <option value="2" selected>Option B</option>
+                            <option value="3">Option C</option>
+                            <option value="4">Option D</option>
+                            <option value="5" selected>Option E</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Group List (No Subgroups)</h5>
+                        <select id="groupSelect" class="form-control" multiple data-placeholder="Choose categories...">
+                            <option value="">Select fruit/vegetable (value="")</option>
+                            <option>Placeholder (no value attr)</option>
+                            <option value="1" data-group-id="g_fruits" data-group-name="Fruits">Apple</option>
+                            <option value="2" data-group-id="g_fruits" data-group-name="Fruits" selected>Banana</option>
+                            <option value="3" data-group-id="g_fruits" data-group-name="Fruits">Orange</option>
+                            
+                            <option value="4" data-group-id="g_vegetables" data-group-name="Vegetables">Carrot</option>
+                            <option value="5" data-group-id="g_vegetables" data-group-name="Vegetables">Broccoli</option>
+                            <option value="6" data-group-id="g_vegetables" data-group-name="Vegetables" selected>Spinach</option>
+                            
+                            <option value="7" data-group-id="g_beverages" data-group-name="Beverages">Water</option>
+                            <option value="8" data-group-id="g_beverages" data-group-name="Beverages">Juice</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Nested Tree Group List</h5>
+                        <select id="nestedSelect" class="form-control custom-style-class" multiple data-placeholder="Assign permissions...">
+                            <option value="">Select permissions... (value="")</option>
+                            <option value="1" data-group-id="g_admin" data-group-name="Administration" data-subgroup-id="sg_users" data-subgroup-name="User Management">Create Users</option>
+                            <option value="2" data-group-id="g_admin" data-group-name="Administration" data-subgroup-id="sg_users" data-subgroup-name="User Management">Delete Users</option>
+                            <option value="3" data-group-id="g_admin" data-group-name="Administration" data-subgroup-id="sg_system" data-subgroup-name="System Settings">Edit Configurations</option>
+                            <option value="4" data-group-id="g_admin" data-group-name="Administration" data-subgroup-id="sg_system" data-subgroup-name="System Settings">View Audit Logs</option>
+                            
+                            <option value="5" data-group-id="g_editor" data-group-name="Content Editors" data-subgroup-id="sg_posts" data-subgroup-name="Blog Posts">Publish Posts</option>
+                            <option value="6" data-group-id="g_editor" data-group-name="Content Editors" data-subgroup-id="sg_posts" data-subgroup-name="Blog Posts" selected>Draft Posts</option>
+                            <option value="7" data-group-id="g_editor" data-group-name="Content Editors" data-subgroup-id="sg_media" data-subgroup-name="Media Library" selected>Upload Images</option>
+                            
+                            <option value="8" data-group-id="g_misc" data-group-name="Miscellaneous">General Access</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">AJAX Loaded List</h5>
+                        <div id="ajaxLoading" class="text-muted mb-2 small"><i class="fa-solid fa-spinner fa-spin me-2"></i>Loading from dummy API...</div>
+                        <select id="ajaxSelect" class="form-control" multiple data-placeholder="Choose users..." style="display:none;">
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                </div>
+                </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Single Select (Ignored)</h5>
+                        <select id="singleSelect" class="form-control">
+                            <option value="1">Option A</option>
+                            <option value="2">Option B</option>
+                            <option value="3">Option C</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3"><i class="fa-solid fa-code me-2 text-primary"></i>Selected Values Demo (Real-Time)</h5>
+                        <div class="d-flex flex-wrap gap-4">
+                            <div>
+                                <strong>Simple List:</strong>
+                                <span id="simpleSelectedVal" class="text-muted ms-2">None</span>
+                            </div>
+                            <div>
+                                <strong>Group List:</strong>
+                                <span id="groupSelectedVal" class="text-muted ms-2">None</span>
+                            </div>
+                            <div>
+                                <strong>Nested List:</strong>
+                                <span id="nestedSelectedVal" class="text-muted ms-2">None</span>
+                            </div>
+                            <div>
+                                <strong>AJAX List:</strong>
+                                <span id="ajaxSelectedVal" class="text-muted ms-2">None</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="wi3bit-multi-select.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#simpleSelect').wi3bitMultiSelect({ 
+                nestedGroups: false, 
+                showReset: false,
+                width: '300px'
+            });
+            $('#groupSelect').wi3bitMultiSelect({ 
+                nestedGroups: true, 
+                showSelectAll: false, 
+                showClearAll: false, 
+                showReset: false, // Test: all buttons hidden, header should not show
+                showSearch: true,
+                height: '45px'
+            });
+            $('#nestedSelect').wi3bitMultiSelect({ 
+                nestedGroups: true, 
+                showReset: true,
+                showSearch: true,
+                showTotalCount: true,
+                dropdownHeight: '200px'
+            });
+            $('#singleSelect').wi3bitMultiSelect();
+
+            // Demo script: log selected values in real-time
+            function logValues(selectId, logId) {
+                let val = $(selectId).val() || [];
+                $(logId).text(val.length > 0 ? JSON.stringify(val) : 'None');
+            }
+
+            $('#simpleSelect, #groupSelect, #nestedSelect, #ajaxSelect').on('change', function() {
+                logValues('#simpleSelect', '#simpleSelectedVal');
+                logValues('#groupSelect', '#groupSelectedVal');
+                logValues('#nestedSelect', '#nestedSelectedVal');
+                logValues('#ajaxSelect', '#ajaxSelectedVal');
+            });
+
+            // Fetch users from dummy API (JSONPlaceholder) via jQuery AJAX
+            $.ajax({
+                url: 'https://jsonplaceholder.typicode.com/users',
+                method: 'GET',
+                dataType: 'json'
+            }).done(function (data) {
+                let $ajaxSelect = $('#ajaxSelect');
+                $ajaxSelect.empty(); // clear loading option
+                
+                // Add placeholder option with empty value to test the filtering functionality
+                $ajaxSelect.append('<option value="">Select a user (placeholder)...</option>');
+
+                // Populate with users grouped by their company name
+                data.forEach(function (user) {
+                    $ajaxSelect.append(`
+                        <option value="${user.id}" 
+                                data-group-id="company_${user.company.name.replace(/[^a-zA-Z0-9_-]/g, '_')}" 
+                                data-group-name="${user.company.name}">
+                            ${user.name} (${user.email})
+                        </option>
+                    `);
+                });
+
+                // Initialize the custom multi-select
+                $ajaxSelect.wi3bitMultiSelect({
+                    nestedGroups: true,
+                    showSearch: true,
+                    showReset: true,
+                    showTotalCount: true
+                });
+
+                $('#ajaxLoading').hide();
+                logValues('#ajaxSelect', '#ajaxSelectedVal');
+            }).fail(function (xhr, status, error) {
+                $('#ajaxLoading').html('<span class="text-danger"><i class="fa-solid fa-triangle-exclamation me-2"></i>Failed to load API data.</span>');
+                console.error("AJAX Error: ", error);
+            });
+
+            // Perform initial logs
+            logValues('#simpleSelect', '#simpleSelectedVal');
+            logValues('#groupSelect', '#groupSelectedVal');
+            logValues('#nestedSelect', '#nestedSelectedVal');
+            logValues('#ajaxSelect', '#ajaxSelectedVal');
+        });
+    </script>
+</body>
+</html>
