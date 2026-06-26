@@ -281,7 +281,7 @@
 
             let pText = this.settings.layout.placeholder || $originalSelect.data("placeholder") || "Select...";
             this.$placeholder = $(
-                `<span class="text-muted placeholder-text"><i class="fa-solid fa-list-check me-2"></i>${pText}</span>`,
+                `<span class="text-muted placeholder-text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-2" style="vertical-align: middle;"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/><path d="m3 12 2 2 4-4"/></svg>${pText}</span>`,
             );
             this.$selectedText = $(
                 '<span class="jq-tree-select-selected-text" style="display:none;"></span>',
@@ -290,7 +290,7 @@
                 '<span class="badge bg-primary rounded-pill jq-tree-select-badge text-white" style="display:none;"></span>',
             );
             this.$chevron = $(
-                '<i class="fa-solid fa-chevron-down position-absolute jq-tree-select-chevron"></i>',
+                '<span class="position-absolute jq-tree-select-chevron" style="position: absolute !important; right: 12px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; pointer-events: none; color: var(--jqtree-text-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>',
             );
 
             this.$dropdown = $(
@@ -302,7 +302,7 @@
 
             this.$optionsContainer = $("<div></div>");
             this.$notFound = $(
-                '<div class="jq-tree-select-not-found text-muted text-center" style="display:none;"><i class="fa-solid fa-triangle-exclamation me-2"></i>No matches found</div>',
+                '<div class="jq-tree-select-not-found text-muted text-center" style="display:none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2" style="vertical-align: middle;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>No matches found</div>',
             );
 
             let showHeader =
@@ -323,7 +323,7 @@
                     this.$searchContainer = $(`
                         <div class="jq-tree-select-search-container flex-grow-1">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-transparent border-end-0 text-muted" style="border-color: var(--bs-gray-200); padding: 0.25rem 0.5rem;"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                <span class="input-group-text bg-transparent border-end-0 text-muted" style="border-color: var(--bs-gray-200); padding: 0.25rem 0.5rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
                                 <input type="text" class="form-control border-start-0 jq-tree-select-search-input ps-0" placeholder="${sPlaceholder}" style="border-color: var(--bs-gray-200); font-size: 0.82rem; height: 30px;">
                             </div>
                         </div>
@@ -347,10 +347,10 @@
                                     let $toggle = $(this).prev(".jq-tree-select-group-header, .jq-tree-select-subgroup-header").find(".jq-tree-select-group-toggle");
                                     if (defCollapsed) {
                                         $(this).hide();
-                                        $toggle.removeClass("fa-chevron-down").addClass("fa-chevron-right");
+                                        $toggle.removeClass("expanded").addClass("collapsed");
                                     } else {
                                         $(this).show();
-                                        $toggle.removeClass("fa-chevron-right").addClass("fa-chevron-down");
+                                        $toggle.removeClass("collapsed").addClass("expanded");
                                     }
                                 });
                             }
@@ -379,8 +379,8 @@
                                             $childrenContainers.show();
                                             $ancestors.children(".jq-tree-select-group-header, .jq-tree-select-subgroup-header")
                                                 .find(".jq-tree-select-group-toggle")
-                                                .removeClass("fa-chevron-right")
-                                                .addClass("fa-chevron-down");
+                                                .removeClass("collapsed")
+                                                .addClass("expanded");
                                         }
                                     }
                                 });
@@ -406,7 +406,7 @@
                     (this.settings.grouping.collapsible && (this.settings.grouping.showExpandAll || this.settings.grouping.showCollapseAll));
                 if (hasButtons) {
                     let $actionsWrapper = $(
-                        '<div class="d-flex gap-1 align-items-center"></div>',
+                        '<div class="d-flex gap-1 align-items-center jq-tree-select-actions-wrapper"></div>',
                     );
                     if (this.settings.search.enabled) {
                         $actionsWrapper.addClass("ms-auto");
@@ -421,7 +421,9 @@
                             `<span class="badge bg-light text-dark border me-1 small jq-tree-select-total-options-badge" data-bs-toggle="tooltip" title="Total Options">${this.totalOptions}</span>`,
                         );
                         $actionsWrapper.append($totalBadge);
-                        new bootstrap.Tooltip($totalBadge[0]);
+                        if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                            new bootstrap.Tooltip($totalBadge[0]);
+                        }
                     }
 
                     let buttons = [];
@@ -431,7 +433,7 @@
                         buttons.push({
                             id: "selectAll",
                             title: "Select All",
-                            icon: "fa-check-double",
+                            iconSvg: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m2 12 5.25 5 2.625-3"/><path d="m8 12 5.25 5L22 7"/><path d="m16 7-5.25 5"/></svg>`,
                             hoverClass: "jq-tree-select-text-hover-primary",
                             action: () => {
                                 self.$optionsContainer
@@ -445,7 +447,7 @@
                         buttons.push({
                             id: "clearAll",
                             title: "Clear All",
-                            icon: "fa-xmark",
+                            iconSvg: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
                             hoverClass: "jq-tree-select-text-hover-danger",
                             action: () => {
                                 self.$optionsContainer
@@ -459,7 +461,7 @@
                         buttons.push({
                             id: "reset",
                             title: "Reset to Default",
-                            icon: "fa-arrow-rotate-left",
+                            iconSvg: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`,
                             hoverClass: "jq-tree-select-text-hover-primary",
                             action: () => {
                                 self.$optionsContainer
@@ -479,11 +481,11 @@
                         buttons.push({
                             id: "openAll",
                             title: "Expand All",
-                            icon: "fa-angles-down",
+                            iconSvg: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 13 5 5 5-5"/><path d="m7 7 5 5 5-5"/></svg>`,
                             hoverClass: "jq-tree-select-text-hover-primary",
                             action: () => {
                                 self.$optionsContainer.find(".jq-tree-select-children").show();
-                                self.$optionsContainer.find(".jq-tree-select-group-toggle").removeClass("fa-chevron-right").addClass("fa-chevron-down");
+                                self.$optionsContainer.find(".jq-tree-select-group-toggle").removeClass("collapsed").addClass("expanded");
                                 self.updateUI(true);
                             }
                         });
@@ -492,11 +494,11 @@
                         buttons.push({
                             id: "closeAll",
                             title: "Collapse All",
-                            icon: "fa-angles-up",
+                            iconSvg: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m17 11-5-5-5 5"/><path d="m17 17-5-5-5 5"/></svg>`,
                             hoverClass: "jq-tree-select-text-hover-danger",
                             action: () => {
                                 self.$optionsContainer.find(".jq-tree-select-children").hide();
-                                self.$optionsContainer.find(".jq-tree-select-group-toggle").removeClass("fa-chevron-down").addClass("fa-chevron-right");
+                                self.$optionsContainer.find(".jq-tree-select-group-toggle").removeClass("expanded").addClass("collapsed");
                                 self.updateUI(true);
                             }
                         });
@@ -517,44 +519,67 @@
                     for (let i = 0; i < visibleCount; i++) {
                         let btn = buttons[i];
                         let $btnHtml = $(`
-                            <span class="p-2" data-bs-toggle="tooltip" data-bs-placement="top" title="${btn.title}">
-                                <i class="fa-solid ${btn.icon} jq-tree-select-cursor-pointer ${btn.hoverClass}"></i>
+                            <span class="p-2 jq-tree-select-cursor-pointer d-inline-flex align-items-center justify-content-center ${btn.hoverClass}" data-bs-toggle="tooltip" data-bs-placement="top" title="${btn.title}">
+                                ${btn.iconSvg}
                             </span>
                         `);
                         $actionsWrapper.append($btnHtml);
-                        new bootstrap.Tooltip($btnHtml[0]);
+                        if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                            new bootstrap.Tooltip($btnHtml[0]);
+                        }
 
                         saveBtnReference(btn.id, $btnHtml);
 
                         $btnHtml.on("click", function () {
                             if ($btnHtml.hasClass("jq-tree-select-action-disabled")) return;
                             btn.action($btnHtml);
-                            let tooltip = bootstrap.Tooltip.getInstance(this);
-                            if (tooltip) tooltip.hide();
+                            if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                                let tooltip = bootstrap.Tooltip.getInstance(this);
+                                if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                            }
                         });
                     }
 
                     if (showOverflow) {
                         let $menuWrapper = $(`
                             <div class="dropdown jq-tree-select-overflow-menu" data-bs-toggle="tooltip" data-bs-placement="top" title="More Actions">
-                                <span class="p-2 jq-tree-select-cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-ellipsis-vertical jq-tree-select-text-hover-primary"></i>
+                                <span class="p-2 jq-tree-select-cursor-pointer d-inline-flex align-items-center justify-content-center jq-tree-select-text-hover-primary" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
                                 </span>
                                 <ul class="dropdown-menu dropdown-menu-end shadow p-1 mt-1" style="font-size: 0.85rem; min-width: 150px; z-index: 1050;">
                                 </ul>
                             </div>
                         `);
                         $actionsWrapper.append($menuWrapper);
-                        new bootstrap.Tooltip($menuWrapper[0]);
+                        if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                            new bootstrap.Tooltip($menuWrapper[0]);
+                        }
 
                         let $menuList = $menuWrapper.find(".dropdown-menu");
+                        let $dropdownToggle = $menuWrapper.find('[data-bs-toggle="dropdown"]');
+
+                        $dropdownToggle.on("click", function (e) {
+                            if (typeof bootstrap === 'undefined' || !bootstrap.Dropdown) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                $menuList.toggleClass("show");
+                            }
+                        });
+
+                        $(document).on("click", function (e) {
+                            if (!$menuWrapper.is(e.target) && $menuWrapper.has(e.target).length === 0) {
+                                $menuList.removeClass("show");
+                            }
+                        });
 
                         for (let i = visibleCount; i < buttons.length; i++) {
                             let btn = buttons[i];
                             let $item = $(`
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
-                                        <i class="fa-solid ${btn.icon} text-secondary" style="width: 16px;"></i>
+                                        <span class="text-secondary d-inline-flex align-items-center justify-content-center" style="width: 16px;">
+                                            ${btn.iconSvg}
+                                        </span>
                                         <span>${btn.title}</span>
                                     </a>
                                 </li>
@@ -578,13 +603,15 @@
                 this.$dropdown.append($btnGroup);
             }
 
-            this.displayTooltip = new bootstrap.Tooltip(this.$display[0], {
-                title: () => {
-                    return this.$selectedText.text();
-                },
-                trigger: "hover",
-                placement: "top",
-            });
+            if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                this.displayTooltip = new bootstrap.Tooltip(this.$display[0], {
+                    title: () => {
+                        return this.$selectedText.text();
+                    },
+                    trigger: "hover",
+                    placement: "top",
+                });
+            }
 
             this.$display.on("show.bs.tooltip", (e) => {
                 let el = this.$selectedText[0];
@@ -702,11 +729,11 @@
 
                 function renderNode(node, depth) {
                     let isCollapsed = self.settings.grouping.collapsible && node.collapsed;
-                    let toggleIconClass = isCollapsed ? "fa-chevron-right" : "fa-chevron-down";
+                    let toggleIconClass = isCollapsed ? "collapsed" : "expanded";
                     let childrenStyle = isCollapsed ? 'style="display: none;"' : "";
                     
                     let toggleIconHtml = self.settings.grouping.collapsible 
-                        ? `<i class="fa-solid ${toggleIconClass} me-2 jq-tree-select-group-toggle jq-tree-select-cursor-pointer"></i>` 
+                        ? `<span class="jq-tree-select-group-toggle jq-tree-select-cursor-pointer me-2 ${toggleIconClass}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>` 
                         : "";
 
                     // Check if all options in this node are disabled
@@ -855,10 +882,10 @@
                 let isCollapsed = $children.is(":hidden");
                 if (isCollapsed) {
                     $children.show();
-                    $toggle.removeClass("fa-chevron-right").addClass("fa-chevron-down");
+                    $toggle.removeClass("collapsed").addClass("expanded");
                 } else {
                     $children.hide();
-                    $toggle.removeClass("fa-chevron-down").addClass("fa-chevron-right");
+                    $toggle.removeClass("expanded").addClass("collapsed");
                 }
                 this.updateHeaderButtons();
             });
@@ -928,7 +955,9 @@
         openDropdown() {
             if (this.isDisabled) return;
             this.$dropdown.addClass("show");
-            this.displayTooltip.hide();
+            if (this.displayTooltip && typeof this.displayTooltip.hide === "function") {
+                this.displayTooltip.hide();
+            }
             
             this.$originalSelect.trigger("jqtree:open", [this]);
             if (typeof this.settings.callbacks.onOpen === "function") {
@@ -952,25 +981,23 @@
             }
         }
 
-        syncParents($elem) {
-            let $parentContainer = $elem.closest(".jq-tree-select-children");
+        syncParents($checkbox) {
+            let $parentContainer = $checkbox.closest(".jq-tree-select-children");
             if ($parentContainer.length === 0) return;
 
-            let $parentHeader = $parentContainer.prev(".jq-tree-select-group-header, .jq-tree-select-subgroup-header");
-            if ($parentHeader.length === 0) return;
+            let $groupHeader = $parentContainer.prev(".jq-tree-select-group-header, .jq-tree-select-subgroup-header");
+            if ($groupHeader.length === 0) return;
 
-            let $parentCheckbox = $parentHeader.find(".group-checkbox");
+            let $parentCheckbox = $groupHeader.find(".group-checkbox");
             if ($parentCheckbox.length === 0) return;
 
-            // Only count active (non-disabled) leaf checkboxes
             let $leafCheckboxes = $parentContainer.find(".select-checkbox:not(:disabled)");
             let total = $leafCheckboxes.length;
             let checked = $leafCheckboxes.filter(":checked").length;
 
             if (total === 0) {
-                // If all options are disabled, just preserve parent unchecked state
                 $parentCheckbox.prop("checked", false).prop("indeterminate", false);
-            } else if (checked === total) {
+            } else if (checked === total && total > 0) {
                 $parentCheckbox.prop("checked", true).prop("indeterminate", false);
             } else if (checked === 0) {
                 $parentCheckbox.prop("checked", false).prop("indeterminate", false);
@@ -982,21 +1009,21 @@
         }
 
         syncAllGroups() {
-            let $containers = this.$optionsContainer.find(".jq-tree-select-children");
-            $containers.each(function () {
+            let $childrenContainers = this.$optionsContainer.find(".jq-tree-select-children");
+            $childrenContainers.each(function () {
                 let depth = $(this).parents(".jq-tree-select-children").length;
                 $(this).data("depth", depth);
             });
 
-            let sortedContainers = $containers.get().sort((a, b) => {
+            let sortedContainers = $childrenContainers.get().sort((a, b) => {
                 return $(b).data("depth") - $(a).data("depth");
             });
 
             $(sortedContainers).each(function () {
-                let $parentHeader = $(this).prev(".jq-tree-select-group-header, .jq-tree-select-subgroup-header");
-                if ($parentHeader.length === 0) return;
+                let $groupHeader = $(this).prev(".jq-tree-select-group-header, .jq-tree-select-subgroup-header");
+                if ($groupHeader.length === 0) return;
 
-                let $parentCheckbox = $parentHeader.find(".group-checkbox");
+                let $parentCheckbox = $groupHeader.find(".group-checkbox");
                 if ($parentCheckbox.length === 0) return;
 
                 let $leafCheckboxes = $(this).find(".select-checkbox:not(:disabled)");
@@ -1081,8 +1108,10 @@
             if (this.$btnAll) {
                 if (visibleTotal === 0 || visibleChecked === visibleTotal) {
                     this.$btnAll.addClass("jq-tree-select-action-disabled");
-                    let tooltip = bootstrap.Tooltip.getInstance(this.$btnAll[0]);
-                    if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                        let tooltip = bootstrap.Tooltip.getInstance(this.$btnAll[0]);
+                        if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    }
                 } else {
                     this.$btnAll.removeClass("jq-tree-select-action-disabled");
                 }
@@ -1091,8 +1120,10 @@
             if (this.$btnClear) {
                 if (visibleTotal === 0 || visibleChecked === 0) {
                     this.$btnClear.addClass("jq-tree-select-action-disabled");
-                    let tooltip = bootstrap.Tooltip.getInstance(this.$btnClear[0]);
-                    if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                        let tooltip = bootstrap.Tooltip.getInstance(this.$btnClear[0]);
+                        if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    }
                 } else {
                     this.$btnClear.removeClass("jq-tree-select-action-disabled");
                 }
@@ -1111,8 +1142,10 @@
                 });
                 if (isResetDisabled) {
                     this.$btnReset.addClass("jq-tree-select-action-disabled");
-                    let tooltip = bootstrap.Tooltip.getInstance(this.$btnReset[0]);
-                    if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                        let tooltip = bootstrap.Tooltip.getInstance(this.$btnReset[0]);
+                        if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    }
                 } else {
                     this.$btnReset.removeClass("jq-tree-select-action-disabled");
                 }
@@ -1125,8 +1158,10 @@
                 
                 if (!this.settings.grouping.collapsible || collapsedCount === 0) {
                     this.$btnOpenAll.addClass("jq-tree-select-action-disabled");
-                    let tooltip = bootstrap.Tooltip.getInstance(this.$btnOpenAll[0]);
-                    if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                        let tooltip = bootstrap.Tooltip.getInstance(this.$btnOpenAll[0]);
+                        if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    }
                 } else {
                     this.$btnOpenAll.removeClass("jq-tree-select-action-disabled");
                 }
@@ -1139,8 +1174,10 @@
 
                 if (!this.settings.grouping.collapsible || expandedCount === 0) {
                     this.$btnCloseAll.addClass("jq-tree-select-action-disabled");
-                    let tooltip = bootstrap.Tooltip.getInstance(this.$btnCloseAll[0]);
-                    if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                        let tooltip = bootstrap.Tooltip.getInstance(this.$btnCloseAll[0]);
+                        if (tooltip && typeof tooltip.hide === "function") tooltip.hide();
+                    }
                 } else {
                     this.$btnCloseAll.removeClass("jq-tree-select-action-disabled");
                 }
@@ -1285,14 +1322,16 @@
 
         destroy() {
             if (this.$wrapper) {
-                this.$wrapper.find('[data-bs-toggle="tooltip"]').each(function () {
-                    let t = bootstrap.Tooltip.getInstance(this);
-                    if (t) t.dispose();
-                });
-                let $oldDisplay = this.$wrapper.find(".jq-tree-select-display");
-                if ($oldDisplay.length) {
-                    let t = bootstrap.Tooltip.getInstance($oldDisplay[0]);
-                    if (t) t.dispose();
+                if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                    this.$wrapper.find('[data-bs-toggle="tooltip"]').each(function () {
+                        let t = bootstrap.Tooltip.getInstance(this);
+                        if (t && typeof t.dispose === "function") t.dispose();
+                    });
+                    let $oldDisplay = this.$wrapper.find(".jq-tree-select-display");
+                    if ($oldDisplay.length) {
+                        let t = bootstrap.Tooltip.getInstance($oldDisplay[0]);
+                        if (t && typeof t.dispose === "function") t.dispose();
+                    }
                 }
                 this.$wrapper.remove();
             }

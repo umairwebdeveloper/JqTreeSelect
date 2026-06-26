@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 # jqTreeSelect
 
@@ -39,7 +39,7 @@
 
 ### CDN (Recommended)
 
-Include the plugin **after** jQuery and Bootstrap:
+Include the plugin **after** jQuery (and Bootstrap if you wish to use its tooltips):
 
 ```html
 <!-- Dependencies -->
@@ -377,8 +377,8 @@ $.fn.mySelect = jts;
 | Dependency                               | Version | Required    |
 | ---------------------------------------- | ------- | ----------- |
 | [jQuery](https://jquery.com/)            | 3.6+    | ✅ Required |
-| [Bootstrap](https://getbootstrap.com/)   | 5.x     | ✅ Required |
-| [Font Awesome](https://fontawesome.com/) | 6.x     | ✅ Required |
+| [Bootstrap](https://getbootstrap.com/)   | 5.x     | ❌ Optional (Only for icons/tooltips if loaded) |
+| [Font Awesome](https://fontawesome.com/) | 6.x     | ❌ Optional (Only if you override icons with custom classes) |
 
 ---
 
