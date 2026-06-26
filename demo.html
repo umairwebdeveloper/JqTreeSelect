@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jqTreeSelect – Interactive Demo</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="jq-tree-select.css">
+    <style>
+        .card {
+            border-radius: 12px;
+        }
+        .console-box {
+            background: #1e1e1e;
+            color: #00ff00;
+            font-family: monospace;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+        .btn-api {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+    </style>
+</head>
+<body class="bg-light p-4">
+
+    <div class="container-fluid max-width-xxl">
+        <!-- Modern Navigation / Header -->
+        <header class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-primary text-white p-2 rounded-3 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                    <i class="fa-solid fa-list-check fs-4"></i>
+                </div>
+                <div>
+                    <h3 class="m-0 fw-bold text-dark">jqTreeSelect <span class="text-primary font-monospace fs-6 fw-normal">Demo Suite</span></h3>
+                    <p class="text-muted m-0 small">Interactive playground demonstrating all hierarchical and checklist configurations</p>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2 mt-3 mt-sm-0">
+                <a href="index.html" class="btn btn-outline-primary px-3 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-book"></i>
+                    <span>Developer Documentation</span>
+                </a>
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill small">
+                    <i class="fa-solid fa-circle-check me-1"></i>v1.2.0
+                </span>
+            </div>
+        </header>
+        
+        <div class="row">
+            <!-- 1. Flat Configuration Callout -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1 fw-bold">Simple List (No Groups)</h5>
+                        <p class="text-muted small mb-3">Initialized via JS options using the new nested structure.</p>
+                        <select id="simpleSelect" class="form-control" multiple>
+                            <option value="">Placeholder option (value="")</option>
+                            <option>Placeholder option (no value attr)</option>
+                            <option value="1">Option A</option>
+                            <option value="2" selected>Option B</option>
+                            <option value="3">Option C</option>
+                            <option value="4">Option D</option>
+                            <option value="5" selected>Option E</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. HTML Data Attributes Callout -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1 fw-bold">Group List (HTML Attributes Config)</h5>
+                        <p class="text-muted small mb-3">Settings parsed automatically from <code>data-actions-*</code>, <code>data-search-*</code>, etc.</p>
+                        <select id="groupSelect" class="form-control" multiple 
+                                data-placeholder="Choose categories..."
+                                data-grouping-nested="true"
+                                data-actions-show-select-all="false"
+                                data-actions-show-clear-all="false"
+                                data-actions-show-reset="false"
+                                data-search-enabled="true"
+                                data-layout-height="45px">
+                            <option value="">Select fruit/vegetable (value="")</option>
+                            <option value="1" data-group-id="g_fruits" data-group-name="Fruits">Apple</option>
+                            <option value="2" data-group-id="g_fruits" data-group-name="Fruits" selected>Banana</option>
+                            <option value="3" data-group-id="g_fruits" data-group-name="Fruits">Orange</option>
+                            
+                            <option value="4" data-group-id="g_vegetables" data-group-name="Vegetables">Carrot</option>
+                            <option value="5" data-group-id="g_vegetables" data-group-name="Vegetables">Broccoli</option>
+                            <option value="6" data-group-id="g_vegetables" data-group-name="Vegetables" selected>Spinach</option>
+                            
+                            <option value="7" data-group-id="g_beverages" data-group-name="Beverages">Water</option>
+                            <option value="8" data-group-id="g_beverages" data-group-name="Beverages">Juice</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Classic Nested Tree -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1 fw-bold">Nested Tree (JS Config)</h5>
+                        <p class="text-muted small mb-3">Configured with nested settings, limits height with <code>layout.dropdownHeight</code>.</p>
+                        <select id="nestedSelect" class="form-control" multiple data-placeholder="Assign permissions...">
+                            <option value="">Select permissions... (value="")</option>
+                            <option value="1" data-group-id="g_admin" data-group-name="Administration" data-subgroup-id="sg_users" data-subgroup-name="User Management">Create Users</option>
+                            <option value="2" data-group-id="g_admin" data-group-name="Administration" data-subgroup-id="sg_users" data-subgroup-name="User Management">Delete Users</option>
+                            <option value="3" data-group-id="g_admin" data-group-name="Administration" data-subgroup-id="sg_system" data-subgroup-name="System Settings">Edit Configurations</option>
+                            <option value="4" data-group-id="g_admin" data-group-name="Administration" data-subgroup-id="sg_system" data-subgroup-name="System Settings">View Audit Logs</option>
+                            
+                            <option value="5" data-group-id="g_editor" data-group-name="Content Editors" data-subgroup-id="sg_posts" data-subgroup-name="Blog Posts">Publish Posts</option>
+                            <option value="6" data-group-id="g_editor" data-group-name="Content Editors" data-subgroup-id="sg_posts" data-subgroup-name="Blog Posts" selected>Draft Posts</option>
+                            <option value="7" data-group-id="g_editor" data-group-name="Content Editors" data-subgroup-id="sg_media" data-subgroup-name="Media Library" selected>Upload Images</option>
+                            
+                            <option value="8" data-group-id="g_misc" data-group-name="Miscellaneous">General Access</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. AJAX Dynamic Data Loading -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1 fw-bold">AJAX Dynamic Load (Via <code>settings.data</code>)</h5>
+                        <p class="text-muted small mb-3">Rebuilds options programmatically from standard Javascript JSON arrays.</p>
+                        <div id="ajaxLoading" class="text-muted mb-2 small"><i class="fa-solid fa-spinner fa-spin me-2"></i>Loading from dummy API...</div>
+                        <select id="ajaxSelect" class="form-control" multiple data-placeholder="Choose users..." style="display:none;">
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Unlimited Levels Tree -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1 fw-bold">Unlimited Depth Tree</h5>
+                        <p class="text-muted small mb-3">Nesting tree nodes to infinite depth via <code>data-group-path</code>.</p>
+                        <select id="unlimitedSelect" class="form-control" multiple data-placeholder="Choose permissions...">
+                            <option value="">Select permissions... (value="")</option>
+                            <option value="1" data-group-path="Administration/User Management/Write Operations">Create Users</option>
+                            <option value="2" data-group-path="Administration/User Management/Write Operations" selected>Delete Users</option>
+                            <option value="3" data-group-path="Administration/User Management/Read Operations">View Users List</option>
+                            <option value="4" data-group-path="Administration/System Settings/Security" data-group-collapsed="true">Edit Configurations</option>
+                            <option value="5" data-group-path="Administration/System Settings/Audit Log">View Audit Logs</option>
+                            
+                            <option value="6" data-group-path="Content Editors/Blog Posts/Drafts" data-group-collapsed="true">Draft Posts</option>
+                            <option value="7" data-group-path="Content Editors/Blog Posts/Published">Publish Posts</option>
+                            <option value="8" data-group-path="Content Editors/Media Library" data-group-collapsed="false" selected>Upload Images</option>
+                            
+                            <option value="9" data-group-path="Miscellaneous">General Access</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Native Disabled Widget & Options -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1 fw-bold">Disabled Select &amp; Disabled Options</h5>
+                        <p class="text-muted small mb-3">Dropdown is read-only. Highlights native option disabling within lists.</p>
+                        <select id="disabledSelect" class="form-control" multiple disabled data-placeholder="Cannot select...">
+                            <option value="1">Item Active 1</option>
+                            <option value="2" disabled>Item Disabled 2</option>
+                            <option value="3">Item Active 3</option>
+                            <option value="4" disabled selected>Item Disabled Selected 4</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Values & API Console Playground -->
+        <div class="row mt-2">
+            <!-- Selected Values -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3 fw-bold"><i class="fa-solid fa-code me-2 text-primary"></i>Real-Time Values Log</h5>
+                        <table class="table table-bordered table-striped small align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 30%">Dropdown</th>
+                                    <th>Selected Values</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Simple List:</strong></td>
+                                    <td><span id="simpleSelectedVal" class="text-muted">None</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Group List:</strong></td>
+                                    <td><span id="groupSelectedVal" class="text-muted">None</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nested List:</strong></td>
+                                    <td><span id="nestedSelectedVal" class="text-muted">None</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>AJAX List:</strong></td>
+                                    <td><span id="ajaxSelectedVal" class="text-muted">None</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Unlimited Tree:</strong></td>
+                                    <td><span id="unlimitedSelectedVal" class="text-muted">None</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Console & Controls -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-3 fw-bold"><i class="fa-solid fa-terminal me-2 text-primary"></i>Interactive API Console (Unlimited Tree Dropdown)</h5>
+                        
+                        <div class="mb-3 d-flex flex-wrap gap-2">
+                            <button class="btn btn-outline-secondary btn-api" id="btnToggleDisable">Toggle Disable</button>
+                            <button class="btn btn-outline-primary btn-api" id="btnValSet">Set Val to [3, 8]</button>
+                            <button class="btn btn-outline-primary btn-api" id="btnValGet">Get Val</button>
+                            <button class="btn btn-outline-success btn-api" id="btnSelectAll">Select All</button>
+                            <button class="btn btn-outline-warning btn-api" id="btnClear">Clear</button>
+                            <button class="btn btn-outline-info btn-api" id="btnExpand">Expand All</button>
+                            <button class="btn btn-outline-info btn-api" id="btnCollapse">Collapse All</button>
+                            <button class="btn btn-outline-danger btn-api" id="btnDestroy">Destroy</button>
+                            <button class="btn btn-outline-dark btn-api" id="btnRebuild">Rebuild</button>
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <div class="console-box" id="consoleLog">
+                                <div>[System] Console initialized. Interactive events will log here.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="jq-tree-select.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Helper to log messages in console box
+            function logToConsole(message, type = "event") {
+                let color = type === "event" ? "#00ff00" : type === "system" ? "#00bcff" : "#ffbc00";
+                let text = `[${new Date().toLocaleTimeString()}] <span style="color: ${color};">${message}</span>`;
+                let $console = $('#consoleLog');
+                $console.append(`<div>${text}</div>`);
+                $console.scrollTop($console[0].scrollHeight);
+            }
+
+            // 1. Initialize Simple Dropdown using nested parameters
+            $('#simpleSelect').jqTreeSelect({ 
+                layout: {
+                    width: '100%',
+                    placeholder: 'Select options...'
+                },
+                actions: {
+                    showReset: false
+                }
+            });
+
+            // 2. Initialize Group Dropdown
+            $('#groupSelect').jqTreeSelect();
+
+            // 3. Initialize Nested Dropdown
+            $('#nestedSelect').jqTreeSelect({ 
+                grouping: {
+                    nested: true
+                },
+                actions: {
+                    showReset: true,
+                    showTotalCount: true
+                },
+                search: {
+                    enabled: true,
+                    placeholder: 'Search permissions...'
+                },
+                layout: {
+                    dropdownHeight: '220px'
+                }
+            });
+
+            // 4. Initialize Disabled Select
+            $('#disabledSelect').jqTreeSelect({
+                layout: {
+                    width: '100%'
+                }
+            });
+
+            // 5. Initialize Unlimited Level Tree and bind Callbacks
+            $('#unlimitedSelect').jqTreeSelect({ 
+                grouping: {
+                    nested: true, 
+                    collapsible: true,
+                    collapsedByDefault: false,
+                    showExpandAll: true,
+                    showCollapseAll: true
+                },
+                actions: {
+                    showReset: true,
+                    showTotalCount: true,
+                    showSelectAll: true,
+                    showClearAll: true
+                },
+                search: {
+                    enabled: true
+                },
+                layout: {
+                    dropdownHeight: '300px'
+                },
+                callbacks: {
+                    onInit: function(instance) {
+                        logToConsole("onInit callback fired for #unlimitedSelect", "system");
+                    },
+                    onOpen: function(instance) {
+                        logToConsole("onOpen callback fired: Dropdown opened", "event");
+                    },
+                    onClose: function(instance) {
+                        logToConsole("onClose callback fired: Dropdown closed", "event");
+                    },
+                    onChange: function(detail) {
+                        logToConsole(`onChange callback fired. Selected: [${detail.selectedValues.join(', ')}]`, "event");
+                    },
+                    onDestroy: function(instance) {
+                        logToConsole("onDestroy callback fired: Widget destroyed", "system");
+                    }
+                }
+            });
+
+            // Real-Time Value Logging Handler
+            function logValues(selectId, logId) {
+                let val = $(selectId).val() || [];
+                $(logId).text(val.length > 0 ? JSON.stringify(val) : 'None');
+            }
+
+            $('#simpleSelect, #groupSelect, #nestedSelect, #ajaxSelect, #unlimitedSelect').on('change', function() {
+                logValues('#simpleSelect', '#simpleSelectedVal');
+                logValues('#groupSelect', '#groupSelectedVal');
+                logValues('#nestedSelect', '#nestedSelectedVal');
+                logValues('#ajaxSelect', '#ajaxSelectedVal');
+                logValues('#unlimitedSelect', '#unlimitedSelectedVal');
+            });
+
+            // API Console Playground Button Events
+            $('#btnToggleDisable').on('click', function() {
+                let instance = $('#unlimitedSelect').data('jq-tree-select');
+                if (instance) {
+                    if (instance.isDisabled) {
+                        $('#unlimitedSelect').jqTreeSelect('enable');
+                        logToConsole("API call: enabled widget", "system");
+                    } else {
+                        $('#unlimitedSelect').jqTreeSelect('disable');
+                        logToConsole("API call: disabled widget", "system");
+                    }
+                }
+            });
+
+            $('#btnValSet').on('click', function() {
+                $('#unlimitedSelect').jqTreeSelect('val', ["3", "8"]);
+                logToConsole("API call: val(['3', '8']) set successfully", "system");
+            });
+
+            $('#btnValGet').on('click', function() {
+                let val = $('#unlimitedSelect').jqTreeSelect('val');
+                logToConsole(`API call: val() returned [${val.join(', ')}]`, "system");
+            });
+
+            $('#btnSelectAll').on('click', function() {
+                $('#unlimitedSelect').jqTreeSelect('selectAll');
+                logToConsole("API call: selectAll() executed", "system");
+            });
+
+            $('#btnClear').on('click', function() {
+                $('#unlimitedSelect').jqTreeSelect('clear');
+                logToConsole("API call: clear() executed", "system");
+            });
+
+            $('#btnExpand').on('click', function() {
+                $('#unlimitedSelect').jqTreeSelect('expandAll');
+                logToConsole("API call: expandAll() executed", "system");
+            });
+
+            $('#btnCollapse').on('click', function() {
+                $('#unlimitedSelect').jqTreeSelect('collapseAll');
+                logToConsole("API call: collapseAll() executed", "system");
+            });
+
+            $('#btnDestroy').on('click', function() {
+                $('#unlimitedSelect').jqTreeSelect('destroy');
+                logToConsole("API call: destroy() executed", "system");
+            });
+
+            $('#btnRebuild').on('click', function() {
+                // Rebuild with custom settings
+                $('#unlimitedSelect').jqTreeSelect({
+                    grouping: {
+                        nested: true, 
+                        collapsible: true,
+                        showExpandAll: true,
+                        showCollapseAll: true
+                    },
+                    actions: {
+                        showReset: true,
+                        showTotalCount: true
+                    },
+                    search: {
+                        enabled: true
+                    },
+                    callbacks: {
+                        onChange: function(detail) {
+                            logToConsole(`onChange (rebuilt): [${detail.selectedValues.join(', ')}]`, "event");
+                        }
+                    }
+                });
+                logToConsole("API call: widget rebuilt.", "system");
+            });
+
+            // Fetch users from dummy API (JSONPlaceholder) via jQuery AJAX and load via `settings.data`
+            $.ajax({
+                url: 'https://jsonplaceholder.typicode.com/users',
+                method: 'GET',
+                dataType: 'json'
+            }).done(function (data) {
+                let $ajaxSelect = $('#ajaxSelect');
+                
+                // Formulate data source to pass directly as settings.data parameter
+                let optionsData = data.map(function (user) {
+                    return {
+                        value: user.id.toString(),
+                        text: `${user.name} (${user.email})`,
+                        groupName: user.company.name,
+                        groupId: `company_${user.company.name.replace(/[^a-zA-Z0-9_-]/g, '_')}`
+                    };
+                });
+
+                // Add an active/disabled test option at the end
+                optionsData.push({
+                    value: "disabled_test",
+                    text: "Disabled System Account (ReadOnly)",
+                    groupName: "System Administrator",
+                    groupId: "grp_system_admin",
+                    disabled: true
+                });
+
+                // Initialize the custom multi-select via the single data property parameter
+                $ajaxSelect.jqTreeSelect({
+                    grouping: {
+                        nested: true
+                    },
+                    search: {
+                        enabled: true,
+                        placeholder: "Filter users..."
+                    },
+                    actions: {
+                        showReset: true,
+                        showTotalCount: true
+                    },
+                    data: optionsData
+                });
+
+                $('#ajaxLoading').hide();
+                logValues('#ajaxSelect', '#ajaxSelectedVal');
+            }).fail(function (xhr, status, error) {
+                $('#ajaxLoading').html('<span class="text-danger"><i class="fa-solid fa-triangle-exclamation me-2"></i>Failed to load API data.</span>');
+                console.error("AJAX Error: ", error);
+            });
+
+            // Perform initial logs
+            logValues('#simpleSelect', '#simpleSelectedVal');
+            logValues('#groupSelect', '#groupSelectedVal');
+            logValues('#nestedSelect', '#nestedSelectedVal');
+            logValues('#ajaxSelect', '#ajaxSelectedVal');
+            logValues('#unlimitedSelect', '#unlimitedSelectedVal');
+        });
+    </script>
+</body>
+</html>
