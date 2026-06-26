@@ -1,9 +1,10 @@
-/**
+/*!
  * jqTreeSelect Custom Multi-Select Dropdown Plugin
  * Version: 1.2.0
  * Description: A dynamic, searchable, grouped, tree-nesting multi-select plugin.
- * Production-ready with nested parameters, global defaults, data-attribute configuration,
- * programmatic data-loading, disabled states support, and lifecycle events/callbacks.
+ * Author: Umair Ashraf (umairashraf5252@gmail.com)
+ * License: MIT (https://opensource.org/licenses/MIT)
+ * Copyright (c) 2026 Umair Ashraf
  */
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
