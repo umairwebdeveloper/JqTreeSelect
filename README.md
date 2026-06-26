@@ -39,18 +39,11 @@
 
 ### CDN (Recommended)
 
-Include the plugin **after** jQuery (and Bootstrap if you wish to use its tooltips):
+Include the plugin styles and scripts after jQuery:
 
 ```html
-<!-- Dependencies -->
-<link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-/>
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-/>
+<!-- jQuery dependency -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <!-- jqTreeSelect styles -->
 <link
@@ -58,13 +51,18 @@ Include the plugin **after** jQuery (and Bootstrap if you wish to use its toolti
     href="https://cdn.jsdelivr.net/gh/umairwebdeveloper/JqTreeSelect/dist/jq-tree-select.min.css"
 />
 
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <!-- jqTreeSelect plugin -->
 <script src="https://cdn.jsdelivr.net/gh/umairwebdeveloper/JqTreeSelect/dist/jq-tree-select.min.js"></script>
 ```
+
+> [!TIP]
+> **Optional Bootstrap 5 Integration**:
+> `jqTreeSelect` is completely standalone and does not require Bootstrap or FontAwesome. However, loading **Bootstrap 5 CSS and JS** can enhance forms styling, layouts, and enable rich tooltip descriptions for selected element counts.
+> ```html
+> <!-- Optional: Bootstrap 5 for better UI & tooltips -->
+> <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+> ```
 
 ### Download
 

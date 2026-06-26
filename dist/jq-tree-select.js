@@ -33,6 +33,14 @@
                 normalizedOpts
             );
             
+            // Auto-enable nested grouping if select has optgroups, unless explicitly disabled by user
+            let hasOptgroups = this.$originalSelect.find("optgroup").length > 0;
+            let explicitlyDisabled = (options && options.grouping && options.grouping.nested === false) ||
+                                     (dataOpts && dataOpts.grouping && dataOpts.grouping.nested === false);
+            if (hasOptgroups && !explicitlyDisabled) {
+                this.settings.grouping.nested = true;
+            }
+            
             this.$btnAll = null;
             this.$btnClear = null;
             this.$btnReset = null;
@@ -675,6 +683,24 @@
                                   let subId = sgId || subName.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
                                 namesPath.push(subName);
                                 idsPath.push(subId);
+                            }
+                        } else {
+                            // Fallback to parent optgroup element if present
+                            let $parentOptgroup = $(this).parent("optgroup");
+                            if ($parentOptgroup.length > 0) {
+                                let label = $parentOptgroup.attr("label") || "Other";
+                                let id = $parentOptgroup.attr("id") || label.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+                                namesPath.push(label);
+                                idsPath.push(id);
+                                
+                                // Support nested optgroups if any (standard HTML doesn't support nested optgroups, but some configurations do)
+                                let $grandparentOptgroup = $parentOptgroup.parent("optgroup");
+                                if ($grandparentOptgroup.length > 0) {
+                                    let grandLabel = $grandparentOptgroup.attr("label") || "Other";
+                                    let grandId = $grandparentOptgroup.attr("id") || grandLabel.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+                                    namesPath.unshift(grandLabel);
+                                    idsPath.unshift(grandId);
+                                }
                             }
                         }
                     }
